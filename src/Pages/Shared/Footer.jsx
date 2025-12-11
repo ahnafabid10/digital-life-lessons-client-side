@@ -4,11 +4,9 @@ import Img from '../../assets/Gemini_Generated_Image_uaqoicuaqoicuaqo.png'
 const Footer = () => {
     return (
         <div className='bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30'>
-            {/* Main Footer Content - Responsive Grid */}
             <footer className="px-4 py-12 md:px-8 lg:px-16 max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 mb-12">
 
-                    {/* Company Info */}
                     <div className="lg:col-span-2">
                         <div className="flex items-center gap-3 mb-4">
                             <img src={Img} alt="Digital Life Lessons Logo" className="w-12 h-12 rounded-lg" />
@@ -22,7 +20,6 @@ const Footer = () => {
                         </p>
                     </div>
 
-                    {/* Quick Links */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">Quick Links</h6>
                         <nav className="flex flex-col gap-3">
@@ -33,7 +30,6 @@ const Footer = () => {
                         </nav>
                     </div>
 
-                    {/* Legal */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">Legal</h6>
                         <nav className="flex flex-col gap-3">
@@ -44,7 +40,6 @@ const Footer = () => {
                         </nav>
                     </div>
 
-                    {/* Contact Info */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">Get in Touch</h6>
                         <div className="flex flex-col gap-4">
@@ -64,13 +59,9 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Divider */}
                 <div className="border-t border-white border-opacity-30 py-8"></div>
 
-                {/* Bottom Footer - Social & Copyright */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    {/* Social Media Links */}
                     <div className="flex justify-center md:justify-start gap-6">
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300" title="Facebook">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -90,7 +81,6 @@ const Footer = () => {
                         </a>
                     </div>
 
-                    {/* Copyright */}
                     <div className="text-center md:text-right">
                         <p className="text-sm opacity-90">
                             © 2025 Digital Life Lessons. All rights reserved.
