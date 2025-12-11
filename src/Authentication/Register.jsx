@@ -30,16 +30,53 @@ import { AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router";
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoMdPhotos } from "react-icons/io";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
 
   return (
-    <div className="h-[80vh] flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-[100vh] flex flex-col pb-20 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <h2 className="text-center text-5xl font-bold mb-5">Join us today!</h2>
         <p className='mb-6'>Sing up now to become a member.</p>
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         
+        
+        <label className="text-sm font-semibold">Name</label>
+        <div className="mt-1 mb-4 flex items-center gap-2 border rounded-lg px-3 py-3">
+          <FaRegUserCircle className="text-gray-500 text-xl" />
+          <input
+            type="email"
+            placeholder="Your Name"
+            className="w-full outline-none text-sm"
+          />
+        </div>
+
+
+        {/* <label className="text-sm font-semibold">Photo</label>
+        <div className="mt-1 mb-4 flex items-center border gap-2 rounded-lg px-3 py-3">
+         <input type="file" className="file-input file-input-neutral" />
+
+
+          <input
+            type="file"
+            placeholder="Your Name"
+            className="w-full file-input file-input-neutral outline-none text-sm"
+          />
+        </div> */}
+
+<label className="text-sm font-semibold">Photo</label>
+<div className="mt-1 mb-4 rounded-xl flex items-center gap-2">
+
+  <input
+    type="file"
+    className="file-input file-input-neutral rounded-lg  w-full text-sm"
+  />
+</div>
+
+
+
         
         <label className="text-sm font-semibold">Email</label>
         <div className="mt-1 mb-4 flex items-center gap-2 border rounded-lg px-3 py-3">
