@@ -1,73 +1,82 @@
 import React, { useState } from "react";
-import { AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const [showPass, setShowPass] = useState(false);
+   const [showPass, setShowPass] = useState(false);
+    const handleShowPassword = (e)=>{
+          e.preventDefault()
+          setShowPass(!showPass)
+      }
+
+    const {
+        register,
+        handleSubmit,
+        // watch,
+        formState: { errors },
+      } = useForm()
+
+      const handleLogin = (data)=>{
+        console.log(data)
+      }
+
 
   return (
-    <div className="h-[80vh] flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <h2 className="text-center text-5xl font-bold mb-5">Please Login</h2>
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        
-        
-        <label className="text-sm font-semibold">Email</label>
-        <div className="mt-1 mb-4 flex items-center gap-2 border rounded-lg px-3 py-3">
-          <AiOutlineMail className="text-gray-500 text-xl" />
-          <input
-            type="email"
-            placeholder="Enter your Email"
-            className="w-full outline-none text-sm"
-          />
-        </div>
-
-        <label className="text-sm font-semibold">Password</label>
-        <div className="mt-1 flex items-center gap-2 border rounded-lg px-3 py-3">
-          <RiLockPasswordLine className="text-gray-500 text-xl" />
-          <input
-            type={showPass ? "text" : "password"}
-            placeholder="Enter your Password"
-            className="w-full outline-none text-sm"
-          />
-          <div onClick={() => setShowPass(!showPass)} className="cursor-pointer">
-            {showPass ? (
-              <AiOutlineEyeInvisible className="text-gray-500 text-xl" />
-            ) : (
-              <AiOutlineEye className="text-gray-500 text-xl" />
-            )}
+       <div className="hero bg-base-200 min-h-screen">
+          
+      <div className="hero-content w-full md:w-[500px] flex-col lg:flex-row-reverse">
+        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+          <div className="p-5">
+            <h2 className="text-center text-5xl font-bold mb-5">Please Login</h2>
+            
           </div>
-        </div>
-
-
-        <div className="flex justify-between items-center mt-2 mb-4">
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input type="checkbox" /> Remember me
-          </label>
-          <button className="text-purple-600 text-sm font-medium hover:underline">
-            Forgot password?
-          </button>
-        </div>
-
-        <button className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">Sign In</button>
-
-
-        <p className="text-center text-sm mt-4">
-          Don’t have an account?{" "}
-          <Link to='/register' className="text-purple-600 font-medium hover:underline">Sign Up</Link>
-        </p>
-
-        <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
-
-            {/* google */}
-        <div className="flex gap-4">
-          <button className="w-full flex items-center justify-center gap-2 border hover:bg-black hover:text-white rounded-lg py-2 font-medium">
-            <FcGoogle className="text-xl" /> Google
-          </button>
+          <div className="card-body">
+            
+            <form onSubmit={handleSubmit(handleLogin)}>
+              <fieldset className="fieldset">
+              <label className="label">Email</label>
+              <input {...register('email', {required: true})} type="email" className="input" placeholder="Email" />
+              {
+            errors.email?.type === 'required' && <span className="text-red-500">Email field is required</span>
+          }
+              <label className="label">Password</label>
+              <div className="flex items-center">
+              <input {...register('password', {required: true, minLength: 6 ,  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/})}  type={showPass ? "text" : "password"} name='password' className="input" placeholder="Password" />
+                        <div onClick={handleShowPassword} className="btn btn-xs absolute right-12 ">{showPass ?  <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}</div>
+                        </div>
+                        {
+            errors.password?.type === 'required' && <span className="text-red-500">Password field is required</span>
+          }
+          {
+            errors.password?.type === 'minLength' && <span className="text-red-500">Password must be at least 6 characters</span>
+          }
+          {
+            errors.password?.type === 'pattern' && <span className="text-red-500">Password must contain one uppercase letter, one special character, at least 8 characters.</span>
+          }
+              <div><a className="link link-hover">Forgot password?</a></div>
+              <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Login</button>
+            </fieldset>
+            <p className="text-center text-sm mt-4">
+               <span> New here? <Link to='/register' className="text-purple-600 font-medium hover:underline">Sign Up Here</Link></span>
+             </p>
+            </form>
+            
+    
+            <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
+    
+                {/* google */}
+            <div className="flex gap-4">
+              <button className="w-full flex items-center justify-center gap-2 border hover:bg-black hover:text-white rounded-lg py-2 font-medium">
+                <FcGoogle className="text-xl" /> Google
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   );
 };
 

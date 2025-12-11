@@ -1,120 +1,107 @@
-// import React from 'react';
-// import { Link } from 'react-router';
-
-// const Register = () => {
-//     return (
-//         <div className='h-[80vh] flex flex-col justify-center items-center '>
-// <div className="login p-5">
-//   <div >
-//     <span className="text-4xl font-bold space-y-3">Join us today!</span>
-//     <p className='my-3'>Sing up now to become a member.</p>
-//   </div>
-//   <form action="#">
-//     <input type="text" placeholder="Enter Name" required="" />
-//     <input type="email" placeholder="Enter Emaill" required="" />
-//     <input type="password" placeholder="Choose A Password" required="" />
-//     <input type="password" placeholder="Re-Enter Password" required="" />
-//     <input type="button" value="Signup" />
-//     <span> Already a member? <Link>Login Here</Link></span>
-//   </form>
-// </div>
-
-//         </div>
-//     );
-// };
-
-// export default Register;
-
 import React, { useState } from "react";
-import { AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router";
-import { FaRegUserCircle } from "react-icons/fa";
-import { IoMdPhotos } from "react-icons/io";
+import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../Hooks/useAuth";
 
 const Login = () => {
+
+  const {registerUser} = useAuth()
+
   const [showPass, setShowPass] = useState(false);
 
+  const handleShowPassword = (e)=>{
+        e.preventDefault()
+        setShowPass(!showPass)
+    }
+
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    formState: { errors },
+  } = useForm()
+
+  const handleRegister = (data)=>{
+    registerUser()
+    console.log(data)
+  }
+
   return (
-    <div className="h-[100vh] flex flex-col pb-20 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="hero bg-base-200 min-h-screen">
+      
+  <div className="hero-content w-full md:w-[500px] flex-col lg:flex-row-reverse">
+    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div className="p-5">
         <h2 className="text-center text-5xl font-bold mb-5">Join us today!</h2>
-        <p className='mb-6'>Sing up now to become a member.</p>
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        
-        
-        <label className="text-sm font-semibold">Name</label>
-        <div className="mt-1 mb-4 flex items-center gap-2 border rounded-lg px-3 py-3">
-          <FaRegUserCircle className="text-gray-500 text-xl" />
+        <p className=' text-center'>Sing up now to become a member.</p>
+      </div>
+      <div className="card-body">
+        <form onSubmit={handleSubmit(handleRegister)}>
+          
+          <fieldset className="fieldset">
+            {/* name */}
+          <label className="label">Name</label>
           <input
-            type="email"
-            placeholder="Your Name"
-            className="w-full outline-none text-sm"
-          />
-        </div>
+          {...register('name', {required: true})} 
+          type="text" 
+          className="input" 
+          placeholder="Your name" />
+          {
+            errors.name?.type === 'required' && <span className="text-red-500">Name field is required</span>
+          }
 
-
-        {/* <label className="text-sm font-semibold">Photo</label>
-        <div className="mt-1 mb-4 flex items-center border gap-2 rounded-lg px-3 py-3">
-         <input type="file" className="file-input file-input-neutral" />
-
-
+          {/* photo */}
+          <label className="label">Photo</label>
           <input
-            type="file"
-            placeholder="Your Name"
-            className="w-full file-input file-input-neutral outline-none text-sm"
-          />
-        </div> */}
+          {...register('photo', {required: true})}  
+          type="file" 
+          className="file-input" />
+          {
+            errors.photo?.type === 'required' && <span className="text-red-500">Photo field is required</span>
+          }
 
-<label className="text-sm font-semibold">Photo</label>
-<div className="mt-1 mb-4 rounded-xl flex items-center gap-2">
+          {/* email */}
+          <label className="label">Email</label>
+          <input 
+          {...register('email', {required: true})} 
+          type="email" 
+          className="input" 
+          placeholder="Email" />
+          {
+            errors.email?.type === 'required' && <span className="text-red-500">Email field is required</span>
+          }
 
-  <input
-    type="file"
-    className="file-input file-input-neutral rounded-lg  w-full text-sm"
-  />
-</div>
-
-
-
-        
-        <label className="text-sm font-semibold">Email</label>
-        <div className="mt-1 mb-4 flex items-center gap-2 border rounded-lg px-3 py-3">
-          <AiOutlineMail className="text-gray-500 text-xl" />
-          <input
-            type="email"
-            placeholder="Enter your Email"
-            className="w-full outline-none text-sm"
-          />
-        </div>
-
-        <label className="text-sm font-semibold">Password</label>
-        <div className="mt-1 flex items-center gap-2 border rounded-lg px-3 py-3">
-          <RiLockPasswordLine className="text-gray-500 text-xl" />
-          <input
-            type={showPass ? "text" : "password"}
-            placeholder="Enter your Password"
-            className="w-full outline-none text-sm"
-          />
-          <div onClick={() => setShowPass(!showPass)} className="cursor-pointer">
-            {showPass ? (
-              <AiOutlineEyeInvisible className="text-gray-500 text-xl" />
-            ) : (
-              <AiOutlineEye className="text-gray-500 text-xl" />
-            )}
+          {/* password */}
+          <label className="label">Password</label>
+          <div className='flex items-center'>
+            <input 
+            {...register('password', {required: true, minLength: 6 ,  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/})} 
+            type={showPass ? "text" : "password"} 
+            name='password' 
+            className="input" 
+            placeholder="Password" />
+          <div onClick={handleShowPassword} className="btn btn-xs absolute  right-12 ">{showPass ?  <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}</div>
           </div>
-        </div>
+          {
+            errors.password?.type === 'required' && <span className="text-red-500">Password field is required</span>
+          }
+          {
+            errors.password?.type === 'minLength' && <span className="text-red-500">Password must be at least 6 characters</span>
+          }
+          {
+            errors.password?.type === 'pattern' && <span className="text-red-500">Password must contain one uppercase letter, one special character, at least 8 characters.</span>
+          }
 
-
-        <div className="flex justify-between items-center mt-2 mb-4">
-        </div>
-
-        <button className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">Sign Up</button>
-
-
+          <div><a className="link link-hover">Forgot password?</a></div>
+          <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Login</button>
+        </fieldset>
         <p className="text-center text-sm mt-4">
-            <span> Already a member? <Link to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
-        </p>
+           <span> Already a member? <Link to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
+         </p>
+        </form>
+        
 
         <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
 
@@ -126,6 +113,8 @@ const Login = () => {
         </div>
       </div>
     </div>
+  </div>
+</div>
   );
 };
 
