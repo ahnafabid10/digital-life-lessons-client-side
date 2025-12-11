@@ -3,6 +3,10 @@ import AuthContext from './AuthContext';
 
 const AuthProvider = ({children}) => {
 
+    // const signInUser = ()=>{
+
+    // }
+
     const authInfo = {
         
     }
