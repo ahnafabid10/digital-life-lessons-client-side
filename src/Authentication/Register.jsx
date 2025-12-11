@@ -4,10 +4,11 @@ import { Link } from "react-router";
 import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
+import axios from "axios";
 
 const Login = () => {
 
-  const {registerUser} = useAuth()
+  const {registerUser, updateUserProfile} = useAuth()
 
   const [showPass, setShowPass] = useState(false);
 
@@ -24,8 +25,37 @@ const Login = () => {
   } = useForm()
 
   const handleRegister = (data)=>{
-    registerUser()
-    console.log(data)
+
+    const profileImg = data.photo[0]
+
+    registerUser({email: data.email, password: data.password})
+    .then(res=>{
+      console.log(res.user)
+      const formData = new FormData();
+      formData.append('image', profileImg)
+      const image_API_URL =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`
+
+      axios.post(image_API_URL, formData)
+      .then(res=>{
+        console.log('after image Upload', res.data)
+      })
+
+      //update user profile
+
+      const userProfile = {
+        displayName: data.name,
+        photoURL: res.data.data.url
+      }
+      updateUserProfile(userProfile)
+      .then()
+      .catch(error => console.log(error))
+
+
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+    
   }
 
   return (
@@ -95,7 +125,7 @@ const Login = () => {
           }
 
           <div><a className="link link-hover">Forgot password?</a></div>
-          <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Login</button>
+          <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Sign Up</button>
         </fieldset>
         <p className="text-center text-sm mt-4">
            <span> Already a member? <Link to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
