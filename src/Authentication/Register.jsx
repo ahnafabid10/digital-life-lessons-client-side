@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
 import axios from "axios";
+import SocialPage from "../Pages/SocialPage/SocialPage";
 
 const Login = () => {
 
   const {registerUser, updateUserProfile} = useAuth()
 
   const [showPass, setShowPass] = useState(false);
+
+  const location = useLocation();
+
+  const navigate = useNavigate()
 
   const handleShowPassword = (e)=>{
         e.preventDefault()
@@ -47,7 +51,10 @@ const Login = () => {
         photoURL: res.data.data.url
       }
       updateUserProfile(userProfile)
-      .then()
+      .then(()=>{
+        console.log('user profile updated')
+        navigate(location?.state || '/')
+      })
       .catch(error => console.log(error))
 
 
@@ -128,7 +135,9 @@ const Login = () => {
           <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Sign Up</button>
         </fieldset>
         <p className="text-center text-sm mt-4">
-           <span> Already a member? <Link to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
+           <span> Already a member? <Link
+           state={location.pathname}
+           to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
          </p>
         </form>
         
@@ -136,11 +145,7 @@ const Login = () => {
         <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
 
             {/* google */}
-        <div className="flex gap-4">
-          <button className="w-full flex items-center justify-center gap-2 border hover:bg-black hover:text-white rounded-lg py-2 font-medium">
-            <FcGoogle className="text-xl" /> Google
-          </button>
-        </div>
+        <SocialPage></SocialPage>
       </div>
     </div>
   </div>

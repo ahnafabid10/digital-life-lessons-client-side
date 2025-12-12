@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../Hooks/useAuth";
+import SocialPage from "../Pages/SocialPage/SocialPage";
 
 const Login = () => {
    const [showPass, setShowPass] = useState(false);
+   const {signInUser} = useAuth()
+   const location = useLocation();
+   const navigate = useNavigate()
+   console.log('login location', location);
     const handleShowPassword = (e)=>{
           e.preventDefault()
           setShowPass(!showPass)
@@ -20,6 +26,15 @@ const Login = () => {
 
       const handleLogin = (data)=>{
         console.log(data)
+        signInUser({email: data.email, password: data.password})
+        .then(res=>{
+            console.log(res.user)
+            navigate(location?.state || '/')
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+
       }
 
 
@@ -59,7 +74,7 @@ const Login = () => {
               <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Login</button>
             </fieldset>
             <p className="text-center text-sm mt-4">
-               <span> New here? <Link to='/register' className="text-purple-600 font-medium hover:underline">Sign Up Here</Link></span>
+               <span> New here? <Link state={location.pathname} to='/register' className="text-purple-600 font-medium hover:underline">Sign Up Here</Link></span>
              </p>
             </form>
             
@@ -67,11 +82,7 @@ const Login = () => {
             <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
     
                 {/* google */}
-            <div className="flex gap-4">
-              <button className="w-full flex items-center justify-center gap-2 border hover:bg-black hover:text-white rounded-lg py-2 font-medium">
-                <FcGoogle className="text-xl" /> Google
-              </button>
-            </div>
+            <SocialPage></SocialPage>
           </div>
         </div>
       </div>
