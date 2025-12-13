@@ -45,16 +45,16 @@ export const router = createBrowserRouter([
     ]
   },
   {
-    path: '/dashboard',
+    path: 'dashboard',
     element: <PrivateRoutes><DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {
         index: true,
-        path: '/dashboard/add-lesson',
+        path: 'add-lesson',
         element: <AddLesson></AddLesson>
       },
       {
-        path:'/dashboard/my-lessons',
+        path:'my-lessons',
         element: <MyLessons></MyLessons>
       }
     ]

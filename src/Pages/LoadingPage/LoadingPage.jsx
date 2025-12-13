@@ -3,14 +3,14 @@ import { useAuth } from '../../Hooks/useAuth';
 
 const LoadingPage = () => {
     const { loading } = useAuth()
-    if(loading){
+    if (!loading) {return null};
+
+
         return (
-        <div className='flex items-center justify-center text-center'>
-            <span class="loading loading-infinity loading-xl"></span>
-        </div>
-    );
-    }
-    
-};
+            <div className='h-screen flex items-center justify-center text-center'>
+                <span className="loading loading-infinity loading-xl" />
+            </div>
+        );
+    };
 
 export default LoadingPage;

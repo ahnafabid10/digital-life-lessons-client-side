@@ -8,11 +8,13 @@ const PrivateRoutes = ({children}) => {
 
     const location = useLocation();
 
-    const {user} = useAuth();
-    <LoadingPage></LoadingPage>
+    const {loading ,user} = useAuth();
+    if(loading) {
+        return <LoadingPage></LoadingPage>
+    }
 
     if(!user){
-        return <Navigate state={location.pathname} to="/login"></Navigate>
+        return <Navigate state={location.pathname} to="/login" replace></Navigate>
     }
     
     return children;

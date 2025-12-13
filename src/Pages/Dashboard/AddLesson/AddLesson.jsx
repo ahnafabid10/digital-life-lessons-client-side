@@ -14,7 +14,7 @@ const AddLesson = () => {
 
     const handleAddLesson = (data) => {
         console.log(data);
-        const lessonData = {...data, mail: user?.email, name: user?.displayName}
+        const lessonData = {...data, email: user?.email, name: user?.displayName}
         toast('Lesson added successfully');
 
         //save data to the server
