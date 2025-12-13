@@ -1,13 +1,27 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
+import useAxiosSecure from "../../../Hooks/useAxiosSecure"
+import { useAuth } from '../../../Hooks/useAuth';
+// import { useAuth } from '../../../Hooks/useAuth';
 
 const AddLesson = () => {
     const {register, handleSubmit, formState: { errors }} = useForm();
 
+    const {user} = useAuth()
+
+    const axiosSecure = useAxiosSecure();
+
     const handleAddLesson = (data) => {
         console.log(data);
+        const lessonData = {...data, mail: user?.email, name: user?.displayName}
         toast('Lesson added successfully');
+
+        //save data to the server
+        axiosSecure.post('/lessons', lessonData)
+        .then(res => {
+            console.log('Lesson added', res.data);
+        })
     }
 
 

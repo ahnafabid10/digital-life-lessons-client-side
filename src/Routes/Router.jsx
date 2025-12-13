@@ -30,11 +30,6 @@ export const router = createBrowserRouter([
           path: '/pricing',
           element: <PrivateRoutes><Pricing></Pricing></PrivateRoutes>
         },
-        //check
-        {
-          path: '/add-lesson',
-          element: <PrivateRoutes><AddLesson></AddLesson></PrivateRoutes>
-        },
         {
           path: '/login',
           Component: Login
@@ -55,8 +50,8 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        // path: '/dashboard/add-lesson',
-        // element: <AddLesson></AddLesson>
+        path: '/dashboard/add-lesson',
+        element: <AddLesson></AddLesson>
       },
       {
         path:'/dashboard/my-lessons',
