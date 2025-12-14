@@ -5,8 +5,11 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
 import axios from "axios";
 import SocialPage from "../Pages/SocialPage/SocialPage";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
-const Login = () => {
+const Register = () => {
+
+  const axiosSecure = useAxiosSecure()
 
   const {registerUser, updateUserProfile} = useAuth()
 
@@ -39,10 +42,17 @@ const Login = () => {
       formData.append('image', profileImg)
       const image_API_URL =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`
 
-      axios.post(image_API_URL, formData)
+         axiosSecure.post('/users', {name: res.user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
+         .then(res=>{
+          console.log('added user info', res.data)
+         })
+          
+       axios.post(image_API_URL, formData,)
       .then(res=>{
         console.log('after image Upload', res.data)
       })
+
+      
 
       //update user profile
 
@@ -64,6 +74,57 @@ const Login = () => {
     })
     
   }
+
+//   const handleRegister = (data) => {
+//   const profileImg = data.photo[0];
+
+//   registerUser({ email: data.email, password: data.password })
+//     .then((res) => {
+//       console.log(res.user);
+
+//       const formData = new FormData();
+//       formData.append('image', profileImg);
+//       const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`;
+
+//       // 1️⃣ Upload image first
+//       axios.post(image_API_URL, formData)
+//         .then((imgRes) => {
+//           console.log('after image Upload', imgRes.data);
+
+//           const photoURL = imgRes.data.data.url;
+
+//           // 2️⃣ Save user info to backend
+//           axiosSecure.post('/users', {
+//             name: data.name,
+//             email: data.email,
+//             photo: photoURL,
+//             isPremium: false
+//           })
+//           .then((res) => {
+//             console.log('added user info', res.data);
+
+//             // 3️⃣ Update Firebase profile
+//             const userProfile = {
+//               displayName: data.name,
+//               photoURL: photoURL
+//             };
+
+//             updateUserProfile(userProfile)
+//               .then(() => {
+//                 console.log('user profile updated');
+//                 navigate(location?.state?.from?.pathname || '/');
+//               })
+//               .catch(error => console.log(error));
+//           })
+//           .catch(error => console.log('Backend error:', error));
+//         })
+//         .catch(error => console.log('Image upload error:', error));
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     });
+// };
+
 
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -153,4 +214,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -2,9 +2,11 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useAuth } from '../../Hooks/useAuth';
 import { FcGoogle } from 'react-icons/fc';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const SocialPage = () => {
     const {googleSignIn} = useAuth();
+    const axiosSecure = useAxiosSecure();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -13,6 +15,10 @@ const SocialPage = () => {
         .then(res=>{
             console.log(res.user);
             navigate( location?.state || '/');
+
+        axiosSecure.post('/users', {name: res.user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
+        .then(res=>{
+            console.log('added user info', res.data)})   
             
         })
         .catch(error=>{

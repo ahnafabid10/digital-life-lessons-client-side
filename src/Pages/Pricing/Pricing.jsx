@@ -1,179 +1,101 @@
-import React from 'react';
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { Link } from "react-router";
+import { useAuth } from "../../Hooks/useAuth";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Pricing = () => {
 
-    const pricingPlans = [
-    {
-        id: 1,
-        name: 'Basic',
-        price: '$9.99',
-        period: '/month',
-        description: 'Perfect for beginners',
-        features: [
-            'Access to 10 lessons',
-            'Basic learning materials',
-            'Email support',
-            'Mobile app access',
-            'Community forum access',
-            'Progress tracking dashboard',
-            'Weekly learning reminders',
-            'Beginner-friendly quizzes',
-        ],
-        highlighted: false,
-    },
-    {
-        id: 2,
-        name: 'Premium',
-        price: '$29.99',
-        period: '/month',
-        description: 'For serious learners',
-        features: [
-            'Unlimited lessons',
-            'Premium learning materials',
-            'Priority support',
-            'Mobile app access',
-            'Downloadable resources',
-            'Certificate of completion',
-            'Offline mode support',
-            'Advanced progress insights',
-        ],
-        highlighted: true,
-    },
-    {
-        id: 3,
-        name: 'Premium+',
-        price: '$99.99',
-        period: '/month',
-        description: 'For organizations',
-        features: [
-            'Everything in Professional',
-            'Team collaboration tools',
-            'Custom learning paths',
-            'Advanced analytics',
-            'Dedicated account manager',
-            'API access',
-            'Bulk user management',
-            'Onboarding & training sessions',
-        ],
-        highlighted: false,
-    },
-];
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure()
 
+  const {data: pricing = []} = useQuery({
+    queryKey: ['user', user?.email],
+    queryFn: async ()=>{
+      const res = await axiosSecure.get(`/users?email=${user?.email}`)
+      return res.data[0]
+    }
+  })
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-16 px-4">
-            <div className="max-w-7xl mx-auto">
-                
-                <div className="text-center mb-16">
-                    <h1 className="text-5xl font-bold text-gray-900 mb-4">
-                        Choose the Perfect <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Plan</span> for You
-                    </h1>
-                    <p className="text-xl text-gray-600">
-                        Choose the perfect plan for your learning journey
-                    </p>
-                </div>
-
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    {pricingPlans.map((plan) => (
-                        <div
-                            key={plan.id}
-                            className={`card transform transition-all duration-300 hover:shadow-2xl ${plan.highlighted
-                                    ? 'md:scale-105 bg-gradient-to-br from-primary to-secondary text-white shadow-2xl'
-                                    : 'bg-white hover:shadow-xl'
-                                }`}
-                        >
-                            <div className="card-body">
-                                {plan.highlighted && (
-                                    <div className="badge badge-ghost mb-4 self-start text-primary bg-white">
-                                        MOST POPULAR
-                                    </div>
-                                )}
-
-                                <h2 className="card-title text-3xl mb-2">{plan.name}</h2>
-                                <p className={`mb-4 ${plan.highlighted ? 'text-white/80' : 'text-gray-600'}`}>
-                                    {plan.description}
-                                </p>
-
-                                <div className="my-6">
-                                    <span className="text-5xl font-bold">{plan.price}</span>
-                                    <span className={plan.highlighted ? 'text-white/80' : 'text-gray-600'}>
-                                        {plan.period}
-                                    </span>
-                                </div>
-
-                                <div className="divider my-4"></div>
-
-                                <ul className="space-y-3 mb-8">
-                                    {plan.features.map((feature, index) => (
-                                        <li key={index} className="flex items-start gap-3">
-                                            <svg
-                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${plan.highlighted ? 'text-white' : 'text-primary'
-                                                    }`}
-                                                fill="currentColor"
-                                                viewBox="0 0 20 20"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                />
-                                            </svg>
-                                            <span>{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <div className="card-actions">
-                                    <button
-                                        className={`btn w-full font-semibold transition-all duration-300 ${plan.highlighted
-                                                ? 'btn-ghost text-white border-white hover:bg-white hover:text-primary'
-                                                : 'btn-primary text-white'
-                                            }`}
-                                    >
-                                        Get Started
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-
-
-                {/* FAQ Section */}
-                <div className="max-w-4xl mx-auto">
-                    <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                        Frequently Asked Questions
-                    </h2>
-
-                    <div className="space-y-4">
-                        <div className="collapse collapse-plus bg-base-100 border border-base-300">
-  <input type="radio" name="my-accordion-3" defaultChecked />
-  <div className="collapse-title font-semibold">Can I switch plans anytime?</div>
-  <div className="collapse-content text-sm">Yes, you can upgrade or downgrade your plan at any time. Changes will take effect on your next billing cycle.</div>
-</div>
-<div className="collapse collapse-plus bg-base-100 border border-base-300">
-  <input type="radio" name="my-accordion-3" />
-  <div className="collapse-title font-semibold">Is there a free trial?</div>
-  <div className="collapse-content text-sm">Yes, we offer a 7-day free trial for all plans. No credit card required to get started.</div>
-</div>
-<div className="collapse collapse-plus bg-base-100 border border-base-300">
-  <input type="radio" name="my-accordion-3" />
-  <div className="collapse-title font-semibold">What payment methods do you accept?</div>
-  <div className="collapse-content text-sm">We accept all major credit cards, PayPal, and bank transfers for enterprise customers.</div>
-</div>
-<div className="collapse collapse-plus bg-base-100 border border-base-300">
-  <input type="radio" name="my-accordion-3" />
-  <div className="collapse-title font-semibold">Do you offer refunds?</div>
-  <div className="collapse-content text-sm">Yes, we offer a 30-day money-back guarantee if you\'re not satisfied with our service.</div>
-</div>
-                    </div>
-                </div>
-                
-            </div>
+  return (
+    <div className="min-h-screen bg-base-200 py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4">Upgrade to Premium ⭐</h1>
+          <p className="text-gray-500">
+            One-time payment. Lifetime access. No hidden fees.
+          </p>
         </div>
-    );
+
+        {/* Cards */}
+        <div className="grid md:grid-cols-2 gap-8">
+
+          {/* Free Plan */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body">
+              <h2 className="text-2xl font-bold">Free Plan</h2>
+              <p className="text-3xl font-semibold mt-2">৳0</p>
+              <p className="text-sm text-gray-500 mb-4">Forever Free</p>
+
+              <ul className="space-y-3">
+                <li>✅ Create Free Lessons</li>
+                <li>✅ View Public Free Lessons</li>
+                <li>❌ Premium Lessons Access</li>
+                <li>❌ Create Premium Lessons</li>
+                <li>❌ Ad-Free Experience</li>
+                <li>❌ Priority Visibility</li>
+                <li>❌ Advanced Analytics</li>
+                <li>❌ Featured Listings</li>
+              </ul>
+
+              <button className="btn btn-outline mt-6 w-full" disabled>
+                Current Plan
+              </button>
+            </div>
+          </div>
+
+          {/* Premium Plan */}
+          <div className="card bg-gradient-to-br from-primary to-secondary text-white shadow-2xl">
+            <div className="card-body">
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                Premium Plan <span className="badge badge-warning">⭐</span>
+              </h2>
+
+              <p className="text-4xl font-bold mt-2">৳1500</p>
+              <p className="text-sm opacity-90 mb-4">
+                One-time payment · Lifetime access
+              </p>
+
+              <ul className="space-y-3">
+                <li>✅ Create Unlimited Lessons</li>
+                <li>✅ Access Premium Lessons</li>
+                <li>✅ Create Premium Lessons</li>
+                <li>✅ Ad-Free Experience</li>
+                <li>✅ Priority Listing</li>
+                <li>✅ Advanced Analytics</li>
+                <li>✅ Featured Lessons</li>
+                <li>✅ Community Boost</li>
+              </ul>
+              
+
+              <Link to={`/dashboard/payment/${pricing._id}`}
+              className="btn btn-warning mt-6 w-full text-black font-semibold">
+                Upgrade to Premium
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Footer note */}
+        <p className="text-center text-sm text-gray-500 mt-10">
+          Secure payment · Lifetime access · Cancel anytime
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default Pricing;
