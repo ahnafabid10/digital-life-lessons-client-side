@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
 import axios from "axios";
@@ -17,7 +17,9 @@ const Register = () => {
 
   const location = useLocation();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+
 
   const handleShowPassword = (e)=>{
         e.preventDefault()
@@ -35,6 +37,7 @@ const Register = () => {
 
     const profileImg = data.photo[0]
 
+
     registerUser({email: data.email, password: data.password})
     .then(res=>{
       console.log(res.user)
@@ -42,10 +45,26 @@ const Register = () => {
       formData.append('image', profileImg)
       const image_API_URL =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`
 
-         axiosSecure.post('/users', {name: res.user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
+      axiosSecure.post('/users', {name: res.user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
          .then(res=>{
           console.log('added user info', res.data)
          })
+      
+        const userInfo = {
+        name: data.name,
+        email: data.email,
+        photoURL: res.data.data.url,
+        
+      }
+
+      axiosSecure.post('/user', userInfo)
+      .then(res=>{
+        if(res.data.insertedId){
+          console.log('user created in database')
+        }
+        // console.log('added user info', res.data)
+
+      })
           
        axios.post(image_API_URL, formData,)
       .then(res=>{
