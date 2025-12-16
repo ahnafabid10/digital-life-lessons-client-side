@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
 import axios from "axios";
@@ -17,9 +17,7 @@ const Register = () => {
 
   const location = useLocation();
 
-  const navigate = useNavigate();
-
-
+  const navigate = useNavigate()
 
   const handleShowPassword = (e)=>{
         e.preventDefault()
@@ -33,116 +31,46 @@ const Register = () => {
     formState: { errors },
   } = useForm()
 
-  const handleRegister = (data)=>{
 
-    const profileImg = data.photo[0]
+  const handleRegister = (data) => {
+  const profileImg = data.photo[0];
 
+  registerUser({ email: data.email, password: data.password })
+    .then((res) => {
+      console.log("Firebase user created:", res.user);
 
-    registerUser({email: data.email, password: data.password})
-    .then(res=>{
-      console.log(res.user)
       const formData = new FormData();
-      formData.append('image', profileImg)
-      const image_API_URL =`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`
+      formData.append("image", profileImg);
+      const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`;
 
-      axiosSecure.post('/users', {name: res.user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
-         .then(res=>{
-          console.log('added user info', res.data)
-         })
-      
-        const userInfo = {
-        name: data.name,
-        email: data.email,
-        photoURL: res.data.data.url,
-        
-      }
-
-      axiosSecure.post('/user', userInfo)
-      .then(res=>{
-        if(res.data.insertedId){
-          console.log('user created in database')
-        }
-        // console.log('added user info', res.data)
-
-      })
+      axios.post(image_API_URL, formData)
+        .then((imgRes) => {
+          const photoURL = imgRes.data.data.url;
           
-       axios.post(image_API_URL, formData,)
-      .then(res=>{
-        console.log('after image Upload', res.data)
-      })
+          //update user profi;e
+          const userProfile = {
+            displayName: data.name,
+            photoURL: photoURL,
+          };
+        
 
-      
 
-      //update user profile
-
-      const userProfile = {
-        displayName: data.name,
-        photoURL: res.data.data.url
-      }
       updateUserProfile(userProfile)
-      .then(()=>{
-        console.log('user profile updated')
-        navigate(location?.state || '/')
-      })
-      .catch(error => console.log(error))
+            .then(() => {
+              console.log("Firebase profile updated with name and photo");
 
+              axiosSecure.post("/users", {name: data.name, email: data.email,photo: photoURL, userId: res.user.uid, isPremium: false,
+                })
+                .then((res) => {
+                  console.log( res.data);
+                  navigate("/");
+                })
+                .catch((err) => console.log(err));
+            })
 
+        })
     })
-    .catch(error=>{
-      console.log(error)
-    })
-    
-  }
-
-//   const handleRegister = (data) => {
-//   const profileImg = data.photo[0];
-
-//   registerUser({ email: data.email, password: data.password })
-//     .then((res) => {
-//       console.log(res.user);
-
-//       const formData = new FormData();
-//       formData.append('image', profileImg);
-//       const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_Image_hosting_key}`;
-
-//       // 1️⃣ Upload image first
-//       axios.post(image_API_URL, formData)
-//         .then((imgRes) => {
-//           console.log('after image Upload', imgRes.data);
-
-//           const photoURL = imgRes.data.data.url;
-
-//           // 2️⃣ Save user info to backend
-//           axiosSecure.post('/users', {
-//             name: data.name,
-//             email: data.email,
-//             photo: photoURL,
-//             isPremium: false
-//           })
-//           .then((res) => {
-//             console.log('added user info', res.data);
-
-//             // 3️⃣ Update Firebase profile
-//             const userProfile = {
-//               displayName: data.name,
-//               photoURL: photoURL
-//             };
-
-//             updateUserProfile(userProfile)
-//               .then(() => {
-//                 console.log('user profile updated');
-//                 navigate(location?.state?.from?.pathname || '/');
-//               })
-//               .catch(error => console.log(error));
-//           })
-//           .catch(error => console.log('Backend error:', error));
-//         })
-//         .catch(error => console.log('Image upload error:', error));
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-// };
+};
 
 
   return (

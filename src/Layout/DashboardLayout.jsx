@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
+import { FaEye, FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
 import { MdApproval, MdOutlinePlayLesson } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
 
@@ -59,10 +59,18 @@ const DashboardLayout = () => {
         </li>
 
         <li>
-            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Approved Lessons"
-             to='/dashboard/approved-lessons'>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Lessons"
+             to='/dashboard/manage-lessons'>
               <MdApproval></MdApproval>
-              <span className="is-drawer-close:hidden">Approved Lessons</span></NavLink>
+              <span className="is-drawer-close:hidden">Manage Lessons
+</span></NavLink>
+        </li>
+        <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users"
+             to='/dashboard/manage-users'>
+              <FaEye></FaEye>
+              <span className="is-drawer-close:hidden">Manage Users
+</span></NavLink>
         </li>
 
         {/* List item */}

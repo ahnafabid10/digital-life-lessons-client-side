@@ -15,6 +15,7 @@ import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancelled";
 import PaymentHistory from "../Pages/Dashboard/Payment/PaymentHistory";
 import ApprovedLessons from "../Pages/Dashboard/ApprovedLessons/ApprovedLessons";
+import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 
 
 export const router = createBrowserRouter([
@@ -79,8 +80,12 @@ export const router = createBrowserRouter([
         Component: PaymentHistory
       },
       {
-        path:'approved-lessons',
+        path:'manage-lessons',
         Component: ApprovedLessons
+      },
+      {
+        path:'manage-users',
+        Component: ManageUsers
       },
     ]
   }
