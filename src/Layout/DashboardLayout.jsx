@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaRegPlusSquare } from 'react-icons/fa';
+import { FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
 import { MdOutlinePlayLesson } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
 
@@ -50,6 +50,12 @@ const DashboardLayout = () => {
              to='/dashboard/my-lessons'>
               <MdOutlinePlayLesson></MdOutlinePlayLesson>
               <span className="is-drawer-close:hidden">My Lesson</span></NavLink>
+        </li>
+        <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Payment History"
+             to='/dashboard/payment-history'>
+              <FaRegCreditCard />
+              <span className="is-drawer-close:hidden">Payment History</span></NavLink>
         </li>
 
         {/* List item */}
