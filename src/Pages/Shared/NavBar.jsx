@@ -57,12 +57,25 @@ const NavBar = () => {
   </div>
   <div className="navbar-end">
     {
-      user 
-      ? 
-      <button onClick={handleLogOut} state={location.pathname} className="btn">Log Out</button> 
-      :
-      <Link to='/login' className="btn">Login</Link>
+    user 
+
+    ? 
+    
+  <div className="dropdown dropdown-end">
+    <img src={user.photoURL} alt="User" className="w-10 h-10 rounded-full cursor-pointer" tabIndex={0}/>
+    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow">
+      <li className="px-2 py-1 font-semibold"> {user.displayName}</li>
+    <li><Link to="/profile">Profile</Link></li>
+      <li><Link to="/dashboard">Dashboard</Link></li>
+      <li><button onClick={handleLogOut} className="btn btn-primary mt-2">Log Out</button></li>
+    </ul>
+  </div>
+
+  : 
+
+ <Link to="/login" className="btn btn-outline">Login</Link>
     }
+
     
   </div>
 </div>

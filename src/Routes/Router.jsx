@@ -17,6 +17,7 @@ import PaymentHistory from "../Pages/Dashboard/Payment/PaymentHistory";
 import ApprovedLessons from "../Pages/Dashboard/ApprovedLessons/ApprovedLessons";
 import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
+import Profile from "../Pages/Profile/Profile";
 
 
 export const router = createBrowserRouter([
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
         {
           path: '/register',
           Component: Register
+        },
+        {
+          path:'/profile',
+          Component: Profile
         },
         {
             path: '/*',
