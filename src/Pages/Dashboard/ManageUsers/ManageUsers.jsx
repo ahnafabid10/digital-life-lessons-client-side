@@ -17,9 +17,9 @@ const ManageUsers = () => {
         }
     })
 
-    const handleMakeUser = user =>{
+    const handleMakeAdmin = user =>{
         const roleInfo = { role: 'admin'}
-        axiosSecure.patch(`/users/${user._id}`, roleInfo)
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo)
         .then(res=>{
             console.log(res.data)
             if(res.data.modifiedCount){
@@ -76,6 +76,7 @@ const ManageUsers = () => {
         <th>Name</th>
         <th>Email</th>
         <th>Role</th>
+        <th>Total Lesson</th>
         <th>Admin Action</th>
       </tr>
     </thead>
@@ -95,7 +96,7 @@ const ManageUsers = () => {
             </button> 
             : 
             <button
-            onClick={()=> handleMakeUser(user)}
+            onClick={()=> handleMakeAdmin(user)}
             className='btn bg-green-500'><FaUserShield />
             </button>
             }

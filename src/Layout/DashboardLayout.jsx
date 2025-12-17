@@ -2,8 +2,13 @@ import React from 'react';
 import { FaEye, FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
 import { MdApproval, MdOutlinePlayLesson } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
+import useRole from '../Hooks/useRole';
 
 const DashboardLayout = () => {
+  const {role} = useRole()
+  console.log('in the dashboard', role)
+  
+
     return (
         <div>
             <div className="drawer lg:drawer-open">
@@ -58,20 +63,28 @@ const DashboardLayout = () => {
               <span className="is-drawer-close:hidden">Payment History</span></NavLink>
         </li>
 
-        <li>
+        {
+            role === 'admin' && <>(
+              <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Lessons"
-             to='/dashboard/manage-lessons'>
+             to='/dashboard/admin/manage-lessons'>
               <MdApproval></MdApproval>
               <span className="is-drawer-close:hidden">Manage Lessons
 </span></NavLink>
         </li>
         <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users"
-             to='/dashboard/manage-users'>
+             to='/dashboard/admin/manage-users'>
               <FaEye></FaEye>
               <span className="is-drawer-close:hidden">Manage Users
 </span></NavLink>
         </li>
+            )
+            
+            </>
+        }
+
+        
 
         {/* List item */}
         <li>
