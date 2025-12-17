@@ -12,7 +12,7 @@ const AdminRoutes = ({children}) => {
         <LoadingPage></LoadingPage>
     }
 
-    if(role !== ' admin'){
+    if(role !== 'admin'){
         return <Forbidden></Forbidden>
     }
 

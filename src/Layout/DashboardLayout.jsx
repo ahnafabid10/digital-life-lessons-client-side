@@ -64,7 +64,7 @@ const DashboardLayout = () => {
         </li>
 
         {
-            role === 'admin' && <>(
+            role === 'admin' && <>
               <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Lessons"
              to='/dashboard/admin/manage-lessons'>
@@ -79,7 +79,7 @@ const DashboardLayout = () => {
               <span className="is-drawer-close:hidden">Manage Users
 </span></NavLink>
         </li>
-            )
+            
             
             </>
         }

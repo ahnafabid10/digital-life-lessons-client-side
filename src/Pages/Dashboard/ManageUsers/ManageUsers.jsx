@@ -75,8 +75,8 @@ const ManageUsers = () => {
         <th>#</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Total Lessons</th>
         <th>Role</th>
-        <th>Total Lesson</th>
         <th>Admin Action</th>
       </tr>
     </thead>
@@ -87,6 +87,7 @@ const ManageUsers = () => {
         <th>{index + 1}</th>
         <td>{user.name}</td>
         <td>{user.email}</td>
+        <td>5</td>
         <td>{typeof user.role === 'string' ? user.role : user.role?.role}</td>
         <td>
             {
