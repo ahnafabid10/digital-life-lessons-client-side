@@ -60,6 +60,7 @@ const PublicLessons = () => {
     />
     <p className="text-sm font-medium">{lesson?.name}</p>
   </div>
+  <p>Date: {lesson?.createAt}</p>
       {/* user data */}
       {/* <p>{isPremiumUser.name}</p>
       <img src={isPremiumUser.photo} alt="" /> */}
