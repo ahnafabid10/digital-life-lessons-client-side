@@ -3,18 +3,27 @@ import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import useAxiosSecure from "../../../Hooks/useAxiosSecure"
 import { useAuth } from '../../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
 // import { useAuth } from '../../../Hooks/useAuth';
 
 const AddLesson = () => {
     const {register, handleSubmit, formState: { errors }} = useForm();
 
     const {user} = useAuth()
-
     const axiosSecure = useAxiosSecure();
+
+    const {data: usersLesson =[]} = useQuery({
+  queryKey: ['userPlan', user?.email],
+  queryFn: async()=>{
+    const res = await axiosSecure.get(`/users/?email=${user.email}`);
+    console.log('userPlan', res.data)
+    return res.data
+  }
+})
 
     const handleAddLesson = (data) => {
         console.log(data);
-        const lessonData = {...data, email: user?.email, name: user?.displayName}
+        const lessonData = {...data, email: user?.email, name: user?.displayName, photo: user?.photoURL}
         toast('Lesson added successfully');
 
         //save data to the server
@@ -99,6 +108,40 @@ const AddLesson = () => {
             </select>
             {
                 errors.privacy && <span className="text-red-500">Privacy field is required</span>
+            }
+          </div>
+
+            {/* Access Level */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold">Access Level</span>
+            </label>
+            <select
+            {...register('accessLevel', {required: true})}
+              className="select select-bordered w-full"
+              required
+            >
+
+              {
+                usersLesson[0]?.isPremium === true ? <div>
+                  <option value="">Choose category</option>
+              <option>Free</option>
+                <option>Premium</option>
+                </div>
+                :
+                <div>
+                  <option value="">Choose category</option>
+                  <option>Free</option>
+                  <option
+                   value="premium"
+                   disabled
+                   title="Upgrade to Premium to create paid lessons">Premium 🔒</option>
+                </div>
+              }
+              
+            </select>
+            {
+                errors.accessLevel && <span className="text-red-500">Access Level is required</span>
             }
           </div>
 

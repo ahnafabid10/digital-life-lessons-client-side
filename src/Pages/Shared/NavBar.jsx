@@ -1,10 +1,25 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../Hooks/useAuth';
+import { useQuery} from '@tanstack/react-query';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+
 
 const NavBar = () => {
 
-  const {user, logOut} = useAuth();
+  const axiosSecure = useAxiosSecure()
+    const {user, logOut} = useAuth();
+
+
+const {data: userPlan =[]} = useQuery({
+  queryKey: ['userPlan', user?.email],
+  queryFn: async()=>{
+    const res = await axiosSecure.get(`/users/?email=${user.email}`);
+    console.log('userPlan', res.data)
+    return res.data
+  }
+})
+
 
   const handleLogOut = ()=>{
     logOut()
@@ -32,7 +47,7 @@ const NavBar = () => {
 
     return (
         <div>
-            <div className="navbar bg-base-100 shadow-sm">
+            <div className="navbar bg-base-100 shadow-sm  w-full">
   <div className="navbar-start">
     <div className="dropdown">
       <div tabIndex={0} role="button" className="btn-ghost  lg:hidden">
@@ -46,7 +61,7 @@ const NavBar = () => {
         }
       </ul>
     </div>
-    <a className="btn btn-ghost text-lg md:text-xl">Digital Life Lessons</a>
+    <Link to='/' className="btn btn-ghost text-lg md:text-xl">Digital Life Lessons</Link>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal gap-5 px-1">
@@ -57,11 +72,41 @@ const NavBar = () => {
   </div>
   <div className="navbar-end">
     {
-    user 
 
+    user 
     ? 
+    <div className='flex gap-3 items-center'>
+
+<div>
+  
+  {userPlan[0]?.isPremium === true ? 
+    <span className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-md">
+      Premium ⭐</span>
+   
+  : 
+
+    <Link
+      to="/pricing"
+      className="relative inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-300">
+      Upgrade Now</Link>
     
-  <div className="dropdown dropdown-end">
+    }
+</div>
+
+{/* {
+  userPlan.map(plan =>{
+    <p>{plan.role}</p>
+  })
+} */}
+
+
+
+
+
+
+       <div className="dropdown dropdown-end">
+   
+    
     <img src={user.photoURL} alt="User" className="w-10 h-10 rounded-full cursor-pointer" tabIndex={0}/>
     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow">
       <li className="px-2 py-1 font-semibold"> {user.displayName}</li>
@@ -70,6 +115,9 @@ const NavBar = () => {
       <li><button onClick={handleLogOut} className="btn btn-primary mt-2">Log Out</button></li>
     </ul>
   </div>
+    </div>
+    
+ 
 
   : 
 
