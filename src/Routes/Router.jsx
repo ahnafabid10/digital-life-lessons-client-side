@@ -19,6 +19,7 @@ import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
 import Profile from "../Pages/Profile/Profile";
 import LifeLessonDetails from "../Pages/Dashboard/LifeLessonDetails/LifeLessonDetails";
+import ProfilePage from "../Pages/Dashboard/ProfilePage/ProfilePage";
 
 
 export const router = createBrowserRouter([
@@ -52,8 +53,12 @@ export const router = createBrowserRouter([
           Component: Profile
         },
         {
+          path:'/profilePage/:_id',
+          element: <PrivateRoutes><ProfilePage></ProfilePage></PrivateRoutes>
+        },
+        {
           path:`/lessonsDetails/:_id`,
-          element: <LifeLessonDetails></LifeLessonDetails>,
+          element: <PrivateRoutes><LifeLessonDetails></LifeLessonDetails></PrivateRoutes>,
             // loader: ({params}) => fetch(`http:localhost:3000/lessons/${params.id}`)
         },
         {
