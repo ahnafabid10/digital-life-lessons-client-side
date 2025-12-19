@@ -12,6 +12,7 @@ const Payment = () => {
         queryKey: ['users', userId],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/users?id=${userId}`)
+            console.log("payment", res.data)
             return res.data
         }
     })

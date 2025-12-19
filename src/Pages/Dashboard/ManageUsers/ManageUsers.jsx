@@ -9,7 +9,7 @@ const ManageUsers = () => {
 
     const axiosSecure = useAxiosSecure()
 
-    const {refetch, data: users = {}
+    const {refetch, data: users = []
     } = useQuery({
         queryKey: ['users'],
         queryFn: async ()=>{

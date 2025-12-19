@@ -75,7 +75,7 @@ const PublicLessons = () => {
 
 
               <div className="card-actions justify-end mt-4">
-            <Link to={`/lessons/${lesson._id}`}>
+            <Link to={`/lessonsDetails/${lesson._id}`}>
             <button disabled={isPremiumLesson && !isPremiumUser} className="btn btn-primary btn-sm">See Details</button></Link>
         </div>
             </div>

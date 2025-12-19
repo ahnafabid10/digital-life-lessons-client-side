@@ -18,6 +18,7 @@ import ApprovedLessons from "../Pages/Dashboard/ApprovedLessons/ApprovedLessons"
 import ManageUsers from "../Pages/Dashboard/ManageUsers/ManageUsers";
 import AdminRoutes from "./AdminRoutes";
 import Profile from "../Pages/Profile/Profile";
+import LifeLessonDetails from "../Pages/Dashboard/LifeLessonDetails/LifeLessonDetails";
 
 
 export const router = createBrowserRouter([
@@ -49,6 +50,11 @@ export const router = createBrowserRouter([
         {
           path:'/profile',
           Component: Profile
+        },
+        {
+          path:`/lessonsDetails/:_id`,
+          element: <LifeLessonDetails></LifeLessonDetails>,
+            // loader: ({params}) => fetch(`http:localhost:3000/lessons/${params.id}`)
         },
         {
             path: '/*',
