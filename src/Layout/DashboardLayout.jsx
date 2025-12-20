@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   
 
     return (
-        <div>
+        <div className='flex'>
             <div className="drawer lg:drawer-open">
   <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
   <div className="drawer-content">
@@ -57,6 +57,12 @@ const DashboardLayout = () => {
               <span className="is-drawer-close:hidden">My Lesson</span></NavLink>
         </li>
         <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Favourite"
+             to='/dashboard/my-favourite'>
+              <MdOutlinePlayLesson></MdOutlinePlayLesson>
+              <span className="is-drawer-close:hidden">My Favourite</span></NavLink>
+        </li>
+        <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Payment History"
              to='/dashboard/payment-history'>
               <FaRegCreditCard />
@@ -98,6 +104,7 @@ const DashboardLayout = () => {
     </div>
   </div>
 </div>
+
         </div>
     );
 };

@@ -3,21 +3,44 @@ import React from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { Link, useParams } from 'react-router';
 import { useAuth } from '../../../Hooks/useAuth';
-import { FaRegBookmark } from 'react-icons/fa';
+import { FaHeart, FaRegBookmark, FaRegHeart } from 'react-icons/fa';
 import { MdOutlineReport } from "react-icons/md";
 import LoadingPage from '../../LoadingPage/LoadingPage';
 import Comment from '../Comment/Comment';
+import { toast, ToastContainer } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+  LinkedinShareButton,
+  LinkedinIcon
+} from "react-share";
+
 
 
 
 const LifeLessonDetails = () => {
+    const {
+  register,
+  handleSubmit,
+  watch,
+  reset
+} = useForm();
+
+const reason = watch("reason");
+
 
     const axiosSecure = useAxiosSecure()
     const {user} = useAuth()
     const {_id} = useParams()
     console.log("show id", _id)
 
-    const {data: lessonDetails, isLoading} = useQuery({
+    const {data: lessonDetails, isLoading, refetch} = useQuery({
         queryKey:['lessonDetails', _id],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/lessons/${_id}`)
@@ -26,19 +49,93 @@ const LifeLessonDetails = () => {
         }
     })
     const {data: lessons} = useQuery({
-        queryKey:['lessonDetails', user?.email],
+        queryKey:['lesson', user?.email],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/lessons/?email=${user.email}`)
             console.log('lesson details', res.data)
+            
             return res.data;
         }
     })
+
+    console.log("hello lessons",lessons)
+
 
 
      if (isLoading) 
       return <LoadingPage></LoadingPage>;
 
+     const handleLike = async () => {
+  if (!user) {
+    toast.error('Please log in to like');
+    return;
+  }
 
+  const res = await axiosSecure.patch(`/lessons/${_id}/like`, {
+    userId: user.uid
+  });
+
+  if (res.data.modifiedCount) {
+    refetch();
+  }
+};
+
+const handleFavorite = async () => {
+  if (!user) {
+    toast.error('Please log in to save');
+    return;
+  }
+
+  await axiosSecure.patch(`/lessons/${_id}/favorite`, {
+    userId: user.uid
+  });
+
+  await axiosSecure.post('/favourite',{
+    lessonId: _id,
+    Email: user.email,
+  })
+
+  refetch();
+};
+
+
+
+const handleReport = async (data) => {
+  if (!user) {
+    toast.error('Please log in to report');
+    return;
+  }
+
+  await axiosSecure.post('/reportLessons', {
+    lessonId: _id,
+    reporterUserId: user.uid,
+    reporterEmail: user.email,
+    reason: data.reason,
+  });
+
+  Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+  }
+});
+  reset();
+};
+
+
+const shareUrl = window.location.href;
+const shareTitle = lessonDetails?.title || "Check this lesson!";
 
 
     return (
@@ -46,7 +143,56 @@ const LifeLessonDetails = () => {
              <div >
               <div className='flex justify-between'>
                   <h2 className="text-2xl font-bold mb-4">{lessonDetails?.title}</h2>
-                  <MdOutlineReport className='h-10 w-10'/>
+<div className="dropdown dropdown-end">
+  <label tabIndex={0} className="btn btn-ghost">
+    <MdOutlineReport className="w-6 h-6" />
+  </label>
+  <form
+    onSubmit={handleSubmit(handleReport)}
+    tabIndex={0}
+    className="dropdown-content bg-base-100 rounded-box z-10 w-64 p-4 shadow"
+  >
+    <select
+      className="select select-bordered w-full"
+      {...register("reason", { required: true })}
+    >
+      <option value="">Select report reason</option>
+      <option value="Inappropriate Content">Inappropriate Content</option>
+      <option value="Hate Speech or Harassment">Hate Speech or Harassment</option>
+      <option value="Misleading Information">Misleading Information</option>
+      <option value="Spam">Spam</option>
+      <option value="Sensitive Content">Sensitive Content</option>
+      <option value="Other">Other</option>
+    </select>
+
+    {reason && (
+      <button type="submit" className="bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30 btn my-2 text-center justify-center">Submit Report</button>
+    )}
+  </form>
+</div>
+
+                  
+                  {/* <div className="dropdown dropdown-end">
+  <div tabIndex={0} role="button" className="m-1"><MdOutlineReport className='h-10 w-10'/></div>
+  <form action="">
+<ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+    <select>
+      <option>Select Your Option</option>
+      <option>Inappropriate Content</option>
+<option>Hate Speech or Harassment</option>
+<option>Misleading Information</option>
+<option>Spam</option>
+<option>Sensitive Content</option>
+<option>Other</option>
+
+    </select>
+
+  </ul>
+
+  <button>Submit</button>
+  </form>
+  
+</div> */}
 
 
               </div>
@@ -71,27 +217,57 @@ const LifeLessonDetails = () => {
 
       <div className="my-4 flex gap-2">
 <div>
-  <button  className="btn">
-  Like
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke="currentColor" className="size-[1.2em]"><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-</button>
+  <button onClick={handleLike} className="btn btn-outline flex gap-2">
+    {lessonDetails?.likes?.includes(user?.uid)
+      ? <FaHeart className="text-red-500" />
+      : <FaRegHeart />
+    }
+    <span>Like</span>
+    <span className="badge badge-neutral">
+      {lessonDetails?.likes?.length || 0}
+    </span>
+  </button>
+
 </div>
-   <p className='flex gap-2 btn items-center'>Favourite <FaRegBookmark /></p> 
+   <button
+    onClick={handleFavorite}
+    className="btn btn-outline flex gap-2"
+  >
+    <FaRegBookmark />
+    <span>Save</span>
+    <span className="badge badge-neutral">
+      {lessonDetails?.favorites?.length || 0}
+    </span>
+  </button>
     </div>
+
+    <div>
+
+
+    </div>
+
+    <div className="flex gap-2 my-4">
+  <FacebookShareButton url={shareUrl} quote={shareTitle}><FacebookIcon size={32} round />
+  </FacebookShareButton>
+
+  <TwitterShareButton url={shareUrl} title={shareTitle}><TwitterIcon size={32} round />
+  </TwitterShareButton>
+
+  <WhatsappShareButton url={shareUrl} title={shareTitle}><WhatsappIcon size={32} round />
+  </WhatsappShareButton>
+
+  <LinkedinShareButton url={shareUrl} title={shareTitle}><LinkedinIcon size={32} round />
+  </LinkedinShareButton>
+</div>
 
   </div>
   <div className="flex items-center gap-4 p-4 mt-10 border rounded-lg bg-base-100 shadow">
       <img
-        src={lessonDetails?.photo}
-        alt={lessonDetails.name}
-        className="w-16 h-16 rounded-full object-cover"
-      />
+        src={lessonDetails?.photo}  alt={lessonDetails.name} className="w-16 h-16 rounded-full object-cover"/>
 
       <div className="flex-1">
-        <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
-        <p className="text-sm text-gray-500">
-          Total Lessons Created: {lessons.length}
-        </p>
+  <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
+    <p className="text-sm text-gray-500">Total Lessons Created: {lessons.length}</p>
       </div>
 
       <Link to={`/profilePage/${lessonDetails.mongoUserId}`}>
@@ -101,6 +277,7 @@ const LifeLessonDetails = () => {
     <div>
       <Comment></Comment>
     </div>
+    <ToastContainer></ToastContainer>
         </div>
     );
 };

@@ -31,6 +31,11 @@ const AddLesson = () => {
         .then(res => {
             console.log('Lesson added', res.data);
         })
+
+        axiosSecure.post('/favourite')
+        .then(res => {
+            console.log('Lesson added', res.data);
+        })
     }
 
 

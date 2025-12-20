@@ -20,6 +20,8 @@ import AdminRoutes from "./AdminRoutes";
 import Profile from "../Pages/Profile/Profile";
 import LifeLessonDetails from "../Pages/Dashboard/LifeLessonDetails/LifeLessonDetails";
 import ProfilePage from "../Pages/Dashboard/ProfilePage/ProfilePage";
+import Dashboard from "../Layout/Dashboard";
+import MyFavourite from "../Pages/Dashboard/MyFavourite/MyFavourite";
 
 
 export const router = createBrowserRouter([
@@ -68,17 +70,24 @@ export const router = createBrowserRouter([
     ]
   },
   {
-    path: 'dashboard',
+    path: 'dashboard/',
     element: <PrivateRoutes><DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {
         index: true,
+        element: <Dashboard></Dashboard>
+      },
+      {
         path: 'add-lesson',
         element: <AddLesson></AddLesson>
       },
       {
         path:'my-lessons',
         element: <MyLessons></MyLessons>
+      },
+      {
+        path:'my-favourite',
+        element: <MyFavourite></MyFavourite>
       },
       {
         path:'payment/:userId',
