@@ -19,7 +19,7 @@ const MyFavourite = () => {
       const favLessons = await Promise.all(
         favRes.data.map(async fav => {
           const lessonRes = await axiosSecure.get(`/lessons/${fav.lessonId}`);
-          return lessonRes.data;
+          return {...lessonRes.data, favouriteId:fav._id};
         })
       );
       return favLessons;
@@ -34,10 +34,18 @@ const MyFavourite = () => {
         return matchCategory 
     });
 
-    console.log("favourites", favourites)
+    // console.log("favourites", favourites)
+
+    const handleRemoveFavourite = (id)=>{
+      axiosSecure.delete(`/favourite/${id}`)
+      .then(res=>{
+        console.log(res.data)
+      })
+    }
+
 
   return (
-    <div className="w-12/12 mx-auto my-10">
+    <div className="w-10/12 mx-auto my-10">
       <h2 className="text-2xl font-bold mb-6">Total Favourite Lessons: {favourites.length}</h2>
 
                       <div className='flex gap-5'>
@@ -61,13 +69,11 @@ const MyFavourite = () => {
           <div key={lesson._id} className="border rounded shadow p-4">
             <h3 className="text-lg font-semibold">{lesson.title}</h3>
             <p className="text-gray-600">{lesson.description?.slice(0, 100)}...</p>
-            <p className="text-sm text-gray-400 mt-1">By: {lesson.name}</p>
+            <p className="text-sm text-gray-400 mt-1">Category: {lesson.category}</p>
             <Link
               to={`/lessons/${lesson._id}`}
-              className="btn btn-outline mt-2 w-full"
-            >
-              View Lesson
-            </Link>
+              className="btn my-2 w-full btn-primary">View Lesson</Link>
+              <button onClick={()=>handleRemoveFavourite(lesson.favouriteId)} className=' btn bg-white hover:text-white hover:bg-black mt-2 w-full'>Remove From Favourite</button>
           </div>
         ))}
       </div>

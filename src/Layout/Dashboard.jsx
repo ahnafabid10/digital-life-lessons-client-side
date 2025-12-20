@@ -3,6 +3,8 @@ import useAxiosSecure from '../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../Hooks/useAuth';
 import MyFavourite from '../Pages/Dashboard/MyFavourite/MyFavourite';
+import { Link } from 'react-router';
+import { CiSquarePlus } from 'react-icons/ci';
 
 const Dashboard = () => {
     const axiosSecure = useAxiosSecure()
@@ -45,8 +47,9 @@ const { data: lessonsData} = useQuery({
 
 
     return (
-        <div className="w-10/12 mx-auto my-10">
-                 <div className="">
+      <div  className="w-10/12 mx-auto my-10">
+        <div>
+                 <div className="w-10/12 mx-auto my-10">
 <p className="text-4xl text-purple-800 font-bold">
   Total Lessons Created: {lessonsData?.lessons?.length || 0}
 </p>
@@ -59,15 +62,25 @@ const { data: lessonsData} = useQuery({
     >
       <h4 className="text-lg font-semibold">{l.title}</h4>
       <p className="text-gray-400 text-sm mb-2">{l.createAt}</p>
-      <p>{l.description}</p>
+      <p>{l.description.slice(0, 100)}...</p>
+      <Link
+      to={`/lessonsDetails/${l._id}`} className="btn my-2 w-full bg-white text-purple-800">View Lesson</Link>
     </div>
   ))}
+  <div className='className="p-4 border rounded-lg bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30 shadow hover:shadow-lg transition"'>
+<Link to='/dashboard/add-lessons' className='flex justify-center hover:bg-white hover:text-purple-800 items-center'><CiSquarePlus className='flex h-35 w-35'/></Link>
+  </div>
+  
+
       </div>
     </div>
         <MyFavourite></MyFavourite>
 
             
 </div>
+
+      </div>
+
     );
 };
 
