@@ -5,10 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import LoadingPage from '../../LoadingPage/LoadingPage';
 import { toast, ToastContainer } from 'react-toastify';
+import { useAuth } from '../../../Hooks/useAuth';
 
 const UpdateLessons = () => {
     const {register, handleSubmit, formState:{errors}} = useForm()
     const axiosSecure = useAxiosSecure()
+    const {user} = useAuth()
     const {_id} = useParams()
  const { data: lesson, isLoading } = useQuery({
     queryKey: ['lesson', _id],
@@ -17,6 +19,18 @@ const UpdateLessons = () => {
       return res.data;
     },
   });
+
+   const { data: mongoUser } = useQuery({
+    queryKey: ['mongoUser', user?.email],
+     
+    queryFn: async () => {
+        if (!user?.email) return null;
+      const res = await axiosSecure.get(`/users?email=${user.email}`);
+      return res.data[0]; 
+    },
+  });
+
+  console.log('mongodbuser', mongoUser)
 
   const handleUpdate = async (data) => {
     const res = await axiosSecure.put(`/lessons/${_id}`, data);
@@ -123,11 +137,11 @@ const UpdateLessons = () => {
             {...register('accessLevel', {required: true})}
               className="select select-bordered w-full"
               required
-              defaultValue={lesson.accessLevel}
+            defaultValue={lesson.accessLevel}
             >
 
               {
-                lesson?.accessLevel === "Premium" ? <div>
+                mongoUser?.isPremium === true ? <div>
                   <option value="">Choose category</option>
               <option>Free</option>
                 <option>Premium</option>
