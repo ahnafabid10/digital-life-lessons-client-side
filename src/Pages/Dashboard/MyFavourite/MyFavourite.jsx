@@ -46,7 +46,7 @@ const MyFavourite = () => {
 
   return (
     <div className="w-10/12 mx-auto my-10">
-      <h2 className="text-2xl font-bold mb-6">Total Favourite Lessons: {favourites.length}</h2>
+      <h2 className="text-2xl font-bold text-purple-800 mb-6">Total Favourite Lessons: {favourites.length}</h2>
 
                       <div className='flex gap-5'>
                     <div className="dropdown dropdown-center">

@@ -23,6 +23,8 @@ const MyLessons = () => {
         }
     })
 
+    console.log('lessonssss', lessons)
+
     const handleLessonDelete = id =>{
       console.log(id);
       Swal.fire({
@@ -69,7 +71,9 @@ const MyLessons = () => {
         <th>#</th>
         <th>Title</th>
         <th>Category</th>
-        <th>Date</th>
+        <th>Created Date</th>
+        <th>Likes</th>
+        <th>Save Favourites</th>
         <th>Access Level</th>
         <th>Privacy</th>
         <th>Actions</th>
@@ -83,13 +87,16 @@ const MyLessons = () => {
           <td>{lesson.title}</td>
           <td>{lesson.category}</td>
           <td>{lesson.createAt}</td>
+          <td>{lesson?.likesCount || 0}</td>
+          <td>{lesson?.favoritesCount || 0}</td>
           <td>{lesson.accessLevel}</td>
           <td>{lesson.privacy}</td>
           
           <td>
+            
             <Link to={`/dashboard/update-lesson/${lesson._id}`}><button className="btn hover:bg-[#Dab2ff] btn-square"><FaEdit /></button></Link>
-        
-            <button className="btn hover:bg-[#Dab2ff] btn-square mx-2"><FaMagnifyingGlass /></button>
+        <Link to={`/lessonsDetails/${lesson._id}`}><button className="btn hover:bg-[#Dab2ff] btn-square mx-2"><FaMagnifyingGlass /></button></Link>
+            
             <button onClick={()=>handleLessonDelete(lesson._id)} className="btn hover:bg-[#Dab2ff] btn-square"><MdDelete /></button>
           </td>
           

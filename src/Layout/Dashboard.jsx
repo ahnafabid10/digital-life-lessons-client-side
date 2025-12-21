@@ -5,6 +5,7 @@ import { useAuth } from '../Hooks/useAuth';
 import MyFavourite from '../Pages/Dashboard/MyFavourite/MyFavourite';
 import { Link } from 'react-router';
 import { CiSquarePlus } from 'react-icons/ci';
+import UserChart from '../Pages/Dashboard/Chart/UserChart';
 
 const Dashboard = () => {
     const axiosSecure = useAxiosSecure()
@@ -33,7 +34,7 @@ const { data: lessonsData} = useQuery({
     
   });
 
-//   const lessonAccess = lessonsData.lessons
+  const recentLessons = lessonsData?.lessons?.slice()?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))?.slice(0, 4); 
 
 //    const { data: favoriteLessons = [] } = useQuery({
 //     queryKey: ['user-favorites', dbUser?._id],
@@ -50,7 +51,7 @@ const { data: lessonsData} = useQuery({
       <div  className="w-10/12 mx-auto my-10">
         <div>
                  <div className="w-10/12 mx-auto my-10">
-<p className="text-4xl text-purple-800 font-bold">
+<p className="text-2xl text-purple-800 font-bold">
   Total Lessons Created: {lessonsData?.lessons?.length || 0}
 </p>
 
@@ -64,11 +65,13 @@ const { data: lessonsData} = useQuery({
       <p className="text-gray-400 text-sm mb-2">{l.createAt}</p>
       <p>{l.description.slice(0, 100)}...</p>
       <Link
-      to={`/lessonsDetails/${l._id}`} className="btn my-2 w-full bg-white text-purple-800">View Lesson</Link>
+      to={`/lessonsDetails/${l._id}`} className="btn my-2 w-full bg-white font-bold text-purple-800">View Lesson</Link>
+      <Link to={`/dashboard/update-lesson/${l._id}`} className="btn my-2 w-full font-bold text-purple-800 bg-white hover:bg-primary hover:text-white">Update</Link>
     </div>
   ))}
-  <div className='className="p-4 border rounded-lg bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30 shadow hover:shadow-lg transition"'>
-<Link to='/dashboard/add-lessons' className='flex justify-center hover:bg-white hover:text-purple-800 items-center'><CiSquarePlus className='flex h-35 w-35'/></Link>
+  <div className='className="p-4 border rounded-lg bg-gradient-to-r items-center justify-center from-primary to-secondary text-white border-t border-white border-opacity-30 shadow hover:shadow-lg transition"'>
+<Link to='/dashboard/add-lesson' className='flex justify-center hover:bg-white hover:text-purple-800 items-center'><CiSquarePlus className='flex h-35 w-35'/></Link>
+
   </div>
   
 
@@ -79,6 +82,28 @@ const { data: lessonsData} = useQuery({
             
 </div>
 
+<div className='w-10/12 mx-auto my-10'>
+          <h2 className='text-2xl text-purple-800 font-bold'>Recently Added Lessons</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 my-10 gap-6 ">
+  {recentLessons?.map((l) => (
+    <div
+      key={l._id}
+      className="p-4 border rounded-lg bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30 shadow hover:shadow-lg transition"
+    >
+      <h4 className="text-lg font-semibold">{l.title}</h4>
+      <p className="text-gray-400 text-sm mb-2">{l.createAt}</p>
+      <p>{l.description.slice(0, 100)}...</p>
+      <Link
+      to={`/lessonsDetails/${l._id}`} className="btn my-2 w-full bg-white font-bold text-purple-800">View Lesson</Link>
+      <Link to={`/dashboard/update-lesson/${l._id}`} className="btn my-2 w-full font-bold text-purple-800 bg-white hover:bg-primary hover:text-white">Update</Link>
+    </div>
+  ))}
+ 
+  
+
+      </div>
+        </div>
+<UserChart userId={dbUser?._id}></UserChart>
       </div>
 
     );
