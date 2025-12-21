@@ -267,7 +267,7 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
 
       <div className="flex-1">
   <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
-    <p className="text-sm text-gray-500">Total Lessons Created: {lessons.length}</p>
+    <p className="text-sm text-gray-500">Total Lessons Created: {lessons?.length}</p>
       </div>
 
       <Link to={`/profilePage/${lessonDetails.mongoUserId}`}>

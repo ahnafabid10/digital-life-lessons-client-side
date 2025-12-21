@@ -9,8 +9,7 @@ const ManageUsers = () => {
 
     const axiosSecure = useAxiosSecure()
 
-    const {refetch, data: users = []
-    } = useQuery({
+    const {refetch, data: users = []} = useQuery({
         queryKey: ['users'],
         queryFn: async ()=>{
             const res = await axiosSecure.get('/users')
@@ -49,7 +48,7 @@ const ManageUsers = () => {
 .then((result) => {
   if (result.isConfirmed) {
         const roleInfo = { role: 'user'}
-        axiosSecure.patch(`/users/${user._id}`, roleInfo)
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo)
         .then(res=>{ 
             if(res.data.modifiedCount){
                

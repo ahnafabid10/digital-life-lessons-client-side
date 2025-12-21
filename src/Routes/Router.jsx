@@ -22,6 +22,7 @@ import LifeLessonDetails from "../Pages/Dashboard/LifeLessonDetails/LifeLessonDe
 import ProfilePage from "../Pages/Dashboard/ProfilePage/ProfilePage";
 import Dashboard from "../Layout/Dashboard";
 import MyFavourite from "../Pages/Dashboard/MyFavourite/MyFavourite";
+import UpdateLessons from "../Pages/Dashboard/UpdateLessons/UpdateLessons";
 
 
 export const router = createBrowserRouter([
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: 'add-lesson',
         element: <AddLesson></AddLesson>
+      },
+      {
+        path: 'update-lesson/:_id',
+        element: <UpdateLessons></UpdateLessons>
       },
       {
         path:'my-lessons',
