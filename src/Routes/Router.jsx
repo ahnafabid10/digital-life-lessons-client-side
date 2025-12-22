@@ -30,7 +30,6 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
-    element: <ErrorPage></ErrorPage>,
     children: [
         {
             path: '/',
@@ -65,10 +64,7 @@ export const router = createBrowserRouter([
           element: <PrivateRoutes><LifeLessonDetails></LifeLessonDetails></PrivateRoutes>,
             // loader: ({params}) => fetch(`http:localhost:3000/lessons/${params.id}`)
         },
-        {
-            path: '/*',
-            element: <ErrorPage></ErrorPage>
-        }
+        
     ]
   },
   {
@@ -127,6 +123,11 @@ export const router = createBrowserRouter([
         element: <AdminRoutes><Admin></Admin></AdminRoutes>
       },
     ]
+  },
+  {
+            path: '/*',
+            element: <ErrorPage></ErrorPage>
+    
   }
   
 ]);

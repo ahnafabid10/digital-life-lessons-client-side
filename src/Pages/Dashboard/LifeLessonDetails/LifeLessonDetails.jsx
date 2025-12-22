@@ -72,7 +72,8 @@ const reason = watch("reason");
   }
 
   const res = await axiosSecure.patch(`/lessons/${_id}/like`, {
-    userId: user.uid
+    userId: user.uid,
+    
   });
 
   if (res.data.modifiedCount) {
@@ -206,6 +207,7 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
     </div>
 
     <p className="text-gray-500 mb-2">Date: {lessonDetails?.createAt}</p>
+    <p className="text-gray-500 mb-2">Last Update: {lessonDetails?.lastUpdate}</p>
 
         <div className="my-4 flex gap-2">
 <span className="badge">{lessonDetails?.category}</span>

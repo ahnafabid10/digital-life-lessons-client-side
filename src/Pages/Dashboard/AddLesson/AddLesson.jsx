@@ -23,7 +23,7 @@ const AddLesson = () => {
 
     const handleAddLesson = (data) => {
         console.log(data);
-        const lessonData = {...data, email: user?.email, name: user?.displayName,userId: user?.uid,  mongoUserId: usersLesson[0]?._id, photo: user?.photoURL}
+        const lessonData = {...data, email: user?.email, name: user?.displayName,userId: user?.uid, lastUpdate: new Date(),  mongoUserId: usersLesson[0]?._id, photo: user?.photoURL}
         toast('Lesson added successfully');
 
         //save data to the server
