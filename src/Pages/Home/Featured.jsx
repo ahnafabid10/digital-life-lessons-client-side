@@ -28,7 +28,7 @@ const Featured = () => {
                     </div>
             
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((lesson) => (
+            {featured?.map((lesson) => (
                 <div key={lesson.id} className="card bg-base-200 shadow-md hover:shadow-xl transition">
                           <div className="card-body">
                             

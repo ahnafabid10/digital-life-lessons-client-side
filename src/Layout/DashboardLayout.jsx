@@ -1,9 +1,11 @@
 import React from 'react';
 import { FaEye, FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
-import { MdApproval, MdOutlinePlayLesson } from 'react-icons/md';
+import { MdApproval, MdOutlinePlayLesson, MdOutlineReport } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
 import useRole from '../Hooks/useRole';
 import { RiAdminLine } from "react-icons/ri";
+import { GrUserAdmin } from "react-icons/gr";
+
 
 
 const DashboardLayout = () => {
@@ -94,6 +96,23 @@ const DashboardLayout = () => {
              to='/dashboard/admin'>
               <RiAdminLine />
               <span className="is-drawer-close:hidden">Admin Dashboard
+</span></NavLink>
+        </li>
+
+        <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Reported Lessons"
+             to='/dashboard/admin/reported-lessons'>
+              <MdOutlineReport />
+
+              <span className="is-drawer-close:hidden">Reported Lessons
+</span></NavLink>
+        </li>
+        <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Admin Profile"
+             to='/dashboard/admin/profile'>
+              <GrUserAdmin />
+
+              <span className="is-drawer-close:hidden">Admin Profile
 </span></NavLink>
         </li>
             

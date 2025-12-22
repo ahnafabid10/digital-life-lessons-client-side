@@ -24,6 +24,8 @@ import Dashboard from "../Layout/Dashboard";
 import MyFavourite from "../Pages/Dashboard/MyFavourite/MyFavourite";
 import UpdateLessons from "../Pages/Dashboard/UpdateLessons/UpdateLessons";
 import Admin from "../Pages/Dashboard/Admin/Admin";
+import ReportedLessons from "../Pages/Dashboard/ReportedLessons/ReportedLessons";
+import AdminProfile from "../Pages/Dashboard/AdminProfile/AdminProfile";
 
 
 export const router = createBrowserRouter([
@@ -113,6 +115,14 @@ export const router = createBrowserRouter([
         element: <AdminRoutes><ApprovedLessons></ApprovedLessons></AdminRoutes> 
 
 
+      },
+      {
+        path: 'admin/reported-lessons',
+        element: <AdminRoutes><ReportedLessons></ReportedLessons></AdminRoutes>
+      },
+      {
+        path: 'admin/profile',
+        element: <AdminRoutes><AdminProfile></AdminProfile></AdminRoutes>
       },
       {
         path:'admin/manage-users',

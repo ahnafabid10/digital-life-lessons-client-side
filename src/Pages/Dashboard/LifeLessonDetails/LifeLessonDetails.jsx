@@ -109,6 +109,7 @@ const handleReport = async (data) => {
 
   await axiosSecure.post('/reportLessons', {
     lessonId: _id,
+    lessonTitle:lessonDetails?.title ,
     reporterUserId: user.uid,
     reporterEmail: user.email,
     reason: data.reason,

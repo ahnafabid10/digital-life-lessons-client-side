@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { IoCheckboxOutline } from 'react-icons/io5';
 import { CiSquareRemove } from 'react-icons/ci';
@@ -9,11 +9,36 @@ import Swal from 'sweetalert2';
 const ApprovedLessons = () => {
 
     const axiosSecure = useAxiosSecure()
+        const [category, setCategory] = useState('')
+            const [privacy, setPrivacy] = useState('')
+
+
 
     const {data: lessons = [], refetch} = useQuery({
-        queryKey: ['lessons', 'pending'],
+        queryKey: ['lessons'],
         queryFn: async ()=>{
             const res = await axiosSecure.get(`/lessons`)
+            return res.data
+        }
+    })
+    const {data: publicLessons = [],} = useQuery({
+        queryKey: ['publicLessons',],
+        queryFn: async ()=>{
+            const res = await axiosSecure.get(`/lessons/?privacy=Public`)
+            return res.data
+        }
+    })
+    const {data: privateLessons = [], } = useQuery({
+        queryKey: ['privateLessons'],
+        queryFn: async ()=>{
+            const res = await axiosSecure.get(`/lessons/?privacy=Private`)
+            return res.data
+        }
+    })
+    const {data: reportedLessons = []} = useQuery({
+        queryKey: ['reportedLessons'],
+        queryFn: async ()=>{
+            const res = await axiosSecure.get(`/reportLessons`)
             return res.data
         }
     })
@@ -80,9 +105,51 @@ const ApprovedLessons = () => {
         })
     }
 
+     const filter = lessons.filter(v => {
+        const matchCategory = category ? v.category === category : true;
+        const matchPrivacy = privacy ? v.privacy === "Private" : true;
+        return matchCategory  &&  matchPrivacy;
+    });
+
     return (
-        <div>
-            <h2 className="text-5xl">Lessons Pending Approval:{lessons.length}</h2>
+        <div className='w-9/12 mx-auto'>
+
+
+
+            <h2 className="text-5xl mb-2">Lessons Pending Approval:{lessons.length}</h2>
+
+
+            <h2 className='text-lg'>Public lessons: {publicLessons?.length}</h2>
+            <h2  className='text-lg my-2'>Private Lessons: {privateLessons?.length}</h2>
+            <h2  className='text-lg mb-2'>Reported Lessons: {reportedLessons?.length}</h2>
+
+<div className='flex gap-5'>
+                    <div className="dropdown dropdown-center">
+  <div tabIndex={0} role="button" className="btn m-1">Category </div>
+  <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+<li><a onClick={() => setCategory("")}>All</a></li>
+<li><a onClick={() => setCategory("Relationships")}>Relationships</a></li>
+<li><a onClick={() => setCategory("Personal Growth")}>Personal Growth</a></li>
+<li><a onClick={() => setCategory("Mistakes Learned")}>Mistakes Learned</a></li>
+<li><a onClick={() => setCategory("Mindset")}>Mindset</a></li>
+<li><a onClick={() => setCategory("Career")}>Career</a></li>
+  </ul>
+
+  
+</div>
+                    <div className="dropdown dropdown-center">
+  <div tabIndex={0} role="button" className="btn m-1">Location </div>
+  <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+<li><a onClick={() => setPrivacy("")}>All</a></li>
+<li><a onClick={() => setPrivacy("Public")}>Public</a></li>
+<li><a onClick={() => setPrivacy("Private")}>Private</a></li>
+  </ul>
+
+  
+</div>
+                </div>
+
+
             <div className="overflow-x-auto">
   <table className="table table-zebra">
     {/* head */}
@@ -98,7 +165,7 @@ const ApprovedLessons = () => {
     </thead>
     <tbody>
       {
-        lessons.map((lesson, index)=>
+        filter.map((lesson, index)=>
             <tr key={lesson._id}>
         <th>{index+1}</th>
         <td>{lesson.title}</td>
