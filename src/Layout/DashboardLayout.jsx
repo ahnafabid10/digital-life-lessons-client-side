@@ -3,6 +3,8 @@ import { FaEye, FaRegCreditCard, FaRegPlusSquare } from 'react-icons/fa';
 import { MdApproval, MdOutlinePlayLesson } from 'react-icons/md';
 import { Link, NavLink, Outlet } from 'react-router';
 import useRole from '../Hooks/useRole';
+import { RiAdminLine } from "react-icons/ri";
+
 
 const DashboardLayout = () => {
   const {role} = useRole()
@@ -78,11 +80,20 @@ const DashboardLayout = () => {
               <span className="is-drawer-close:hidden">Manage Lessons
 </span></NavLink>
         </li>
+
         <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Manage Users"
              to='/dashboard/admin/manage-users'>
               <FaEye></FaEye>
               <span className="is-drawer-close:hidden">Manage Users
+</span></NavLink>
+        </li>
+
+        <li>
+            <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Admin Dashboard"
+             to='/dashboard/admin'>
+              <RiAdminLine />
+              <span className="is-drawer-close:hidden">Admin Dashboard
 </span></NavLink>
         </li>
             

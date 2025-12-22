@@ -17,6 +17,19 @@ const ManageUsers = () => {
         }
     })
 
+    console.log('tjbgjtbg', users)
+
+    const {data: lessonsCreated = []} = useQuery({
+      queryKey: ['lessonsCreated'],
+      queryFn: async()=>{
+        const res = await axiosSecure.get(`/lessons/users-lesson/stats`)
+        console.log('rbgerghrbrbg', res.data)
+      return res.data
+      }
+    })
+
+
+
     const handleMakeAdmin = user =>{
         const roleInfo = { role: 'admin'}
         axiosSecure.patch(`/users/${user._id}/role`, roleInfo)
@@ -87,7 +100,10 @@ const ManageUsers = () => {
         <th>{index + 1}</th>
         <td>{user.name}</td>
         <td>{user.email}</td>
-        <td>5</td>
+        <td>
+  { lessonsCreated.find(stat => stat._id === user._id.toString())?.count ?? 0 }
+</td>
+
         <td>{typeof user.role === 'string' ? user.role : user.role?.role}</td>
         <td>
             {

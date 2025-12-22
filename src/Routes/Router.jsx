@@ -23,6 +23,7 @@ import ProfilePage from "../Pages/Dashboard/ProfilePage/ProfilePage";
 import Dashboard from "../Layout/Dashboard";
 import MyFavourite from "../Pages/Dashboard/MyFavourite/MyFavourite";
 import UpdateLessons from "../Pages/Dashboard/UpdateLessons/UpdateLessons";
+import Admin from "../Pages/Dashboard/Admin/Admin";
 
 
 export const router = createBrowserRouter([
@@ -120,6 +121,10 @@ export const router = createBrowserRouter([
       {
         path:'admin/manage-users',
         element: <AdminRoutes><ManageUsers></ManageUsers></AdminRoutes>
+      },
+      {
+        path:'admin',
+        element: <AdminRoutes><Admin></Admin></AdminRoutes>
       },
     ]
   }

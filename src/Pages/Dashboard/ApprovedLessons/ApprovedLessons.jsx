@@ -20,7 +20,7 @@ const ApprovedLessons = () => {
 
     const updateLessonStatus = (lesson, status)=>{
         const updateInfo = {status: status, email: lesson.email}
-        axiosSecure.patch(`/lessons/${lesson._id}`, updateInfo)
+        axiosSecure.put(`/lessons/${lesson._id}`, updateInfo)
         .then(res=>{
             if(res.data.modifiedCount){
                 Swal.fire({
@@ -51,7 +51,7 @@ const ApprovedLessons = () => {
     }
 
     const handleRejection = (lesson) => {
-        updateLessonStatus(lesson, 'rejected');
+        updateLessonStatus(lesson, 'featured');
     }
 
     const handleDelete = (id) => {
