@@ -289,7 +289,7 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
           </p>
 
           <Link
-            to={`/lessons/${lesson._id}`}
+            to={`/lessonsDetails/${lesson._id}`}
             className="btn btn-sm btn-outline mt-3 w-full"
           >
             View Lesson
@@ -320,7 +320,7 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
           </p>
 
           <Link
-            to={`/lessons/${lesson._id}`}
+            to={`/lessonsDetails/${lesson._id}`}
             className="btn btn-sm btn-outline mt-3 w-full"
           >
             View Lesson
