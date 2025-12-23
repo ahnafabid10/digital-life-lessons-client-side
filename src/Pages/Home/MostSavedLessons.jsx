@@ -1,82 +1,21 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { FaBookmark } from 'react-icons/fa';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { Link } from 'react-router';
 
 const MostSavedLessons = () => {
 
-      const lessons = [
-    {
-      id: 1,
-      title: "Consistency Beats Motivation",
-      description:
-        "Small actions done daily create bigger results than short bursts of motivation.",
-      category: "Mindset",
-      saved: 420,
-    },
-    {
-      id: 2,
-      title: "Failure Is Feedback",
-      description:
-        "Every mistake teaches you what doesn’t work and how to improve.",
-      category: "Growth",
-      saved: 385,
-    },
-    {
-      id: 3,
-      title: "Protect Your Time",
-      description:
-        "Time is limited—spend it on things that truly matter.",
-      category: "Productivity",
-      saved: 340,
-    },
-    {
-      id: 4,
-      title: "Discipline Creates Freedom",
-      description:
-        "The more disciplined you are, the more control you gain over life.",
-      category: "Discipline",
-      saved: 310,
-    },
-    {
-      id: 5,
-      title: "Learn Before You Earn",
-      description:
-        "Skills compound over time and open doors money cannot.",
-      category: "Learning",
-      saved: 295,
-    },
-    {
-      id: 6,
-      title: "Your Environment Shapes You",
-      description:
-        "Surround yourself with people and habits that push you forward.",
-      category: "Lifestyle",
-      saved: 270,
-    },
-    {
-      id: 7,
-      title: "Focus Beats Multitasking",
-      description:
-        "Deep focus on one task produces better results than doing many poorly.",
-      category: "Focus",
-      saved: 255,
-    },
-    {
-      id: 8,
-      title: "Health Is the Real Wealth",
-      description:
-        "Without physical and mental health, success loses its meaning.",
-      category: "Wellness",
-      saved: 240,
-    },
-    {
-      id: 9,
-      title: "Delayed Gratification Wins",
-      description:
-        "Choosing long-term benefits over short-term pleasure builds success.",
-      category: "Success",
-      saved: 225,
-    },
-  ];
+  const axiosSecure = useAxiosSecure()
+  const { data: lessons = [], isLoading } = useQuery({
+    queryKey: ['mostSavedLessons'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/lessons/most-saved');
+      return res.data;
+    }
+  });
+
+  if (isLoading) return <span className="loading loading-infinity loading-xl"></span>;
 
     return (
         <div>
@@ -95,8 +34,9 @@ const MostSavedLessons = () => {
                 
                 <div className="flex justify-between items-start">
      <h3 className="card-title text-lg">{lesson.title}</h3>
-
-    <div className="flex items-center gap-1 text-secondary"><FaBookmark />
+    
+    <div className="flex items-center gap-1 text-secondary">
+      <span className="text-sm font-semibold">{lesson.favoritesCount || 0}</span><FaBookmark />
           <span className="text-sm font-semibold">{lesson.saved}</span>
               </div>
                 </div>
@@ -104,6 +44,7 @@ const MostSavedLessons = () => {
         <p className="text-sm text-base-content/80 mt-2 line-clamp-3">{lesson.description}</p>
         <div className="card-actions justify-between items-center mt-4">
             <span className="badge badge-outline badge-primary">{lesson.category}</span>
+            <Link to={`/lessonsDetails/${lesson._id}`} className='btn btn-sm btn-primary btn-outline'>Read More</Link>
             </div>
 
               </div>

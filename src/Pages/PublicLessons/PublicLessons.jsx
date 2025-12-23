@@ -4,7 +4,6 @@ import { useAuth } from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { FaLock } from 'react-icons/fa';
 import { Link } from 'react-router';
-import LoadingPage from '../LoadingPage/LoadingPage';
 
 const PublicLessons = () => {
   const { user } = useAuth();
@@ -39,7 +38,8 @@ const PublicLessons = () => {
   });
 
   if (isLoading) {
-    return <LoadingPage></LoadingPage>
+    return <span className="loading min-h-screen items-center justify-center loading-infinity loading-xl"></span>
+
   }
 
 

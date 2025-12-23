@@ -48,7 +48,7 @@ const Admin = () => {
     }
   });
 
-  // Fetch top contributors
+  // top contributors
   const { data: topContributors = [] } = useQuery({
     queryKey: ['topContributors'],
     queryFn: async () => {
