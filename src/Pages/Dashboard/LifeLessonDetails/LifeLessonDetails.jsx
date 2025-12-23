@@ -58,6 +58,31 @@ const reason = watch("reason");
         }
     })
 
+    // Similar by category
+const { data: similarByCategory = [] } = useQuery({
+  queryKey: ['similar-category', lessonDetails?.category],
+  enabled: !!lessonDetails,
+  queryFn: async () => {
+    const res = await axiosSecure.get(
+      `/lessons/similar/category?category=${lessonDetails.category}&lessonId=${_id}`
+    );
+    return res.data;
+  }
+});
+
+const { data: similarByTone = [] } = useQuery({
+  queryKey: ['similar-tone', lessonDetails?.tone],
+  enabled: !!lessonDetails,
+  queryFn: async () => {
+    const res = await axiosSecure.get(
+      `/lessons/similar/tone?tone=${lessonDetails.tone}&lessonId=${_id}`
+    );
+    return res.data;
+  }
+});
+
+
+
     console.log("hello lessons",lessons)
 
 
@@ -242,6 +267,71 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
       {lessonDetails?.favorites?.length || 0}
     </span>
   </button>
+    </div>
+    <div>
+{similarByCategory.length > 0 && (
+  <div className="mt-10">
+    <h2 className="text-xl font-bold mb-4">Similar Lessons</h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {similarByCategory.map(lesson => (
+        <div
+          key={lesson._id}
+          className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+        >
+
+          <h3 className="font-semibold mt-3 line-clamp-2">
+            {lesson.title}
+          </h3>
+
+          <p className="text-sm text-gray-500 mt-1">
+            {lesson.category} · {lesson.tone}
+          </p>
+
+          <Link
+            to={`/lessons/${lesson._id}`}
+            className="btn btn-sm btn-outline mt-3 w-full"
+          >
+            View Lesson
+          </Link>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+{similarByTone.length > 0 && (
+  <div className="mt-10">
+    <h2 className="text-xl font-bold mb-4">Recommended For You</h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {similarByTone.map(lesson => (
+        <div
+          key={lesson._id}
+          className="border rounded-lg p-4 shadow hover:shadow-lg transition"
+        >
+
+          <h3 className="font-semibold mt-3 line-clamp-2">
+            {lesson.title}
+          </h3>
+
+          <p className="text-sm text-gray-500 mt-1">
+            {lesson.category} · {lesson.tone}
+          </p>
+
+          <Link
+            to={`/lessons/${lesson._id}`}
+            className="btn btn-sm btn-outline mt-3 w-full"
+          >
+            View Lesson
+          </Link>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
     </div>
 
     <div>
