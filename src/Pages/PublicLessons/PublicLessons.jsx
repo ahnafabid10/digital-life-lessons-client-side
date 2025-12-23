@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../Hooks/useAuth';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { FaLock } from 'react-icons/fa';
@@ -9,6 +9,17 @@ import LoadingPage from '../LoadingPage/LoadingPage';
 const PublicLessons = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+        const [category, setCategory] = useState('')
+        const [tone, setTone] = useState('')
+        const [search, setSearch] = useState('');
+        const [sortBy, setSortBy] = useState('');
+
+
+             const [currentPage, setCurrentPage] = useState(1);
+  const lessonsPerPage = 9;
+
+
+
 
   const { data: publicLessons = [], isLoading } = useQuery({
     queryKey: ['publicLessons'],
@@ -31,10 +42,101 @@ const PublicLessons = () => {
     return <LoadingPage></LoadingPage>
   }
 
+
+
+
+     const filter = publicLessons?.filter(v => {
+        const matchCategory = category ? v.category === category : true;
+        const matchPrivacy = tone ? v.tone === tone : true;
+
+
+
+        const matchSearch = search
+    ? v.title.toLowerCase().includes(search.toLowerCase()) ||
+      v.description.toLowerCase().includes(search.toLowerCase())
+    : true;
+
+        return matchCategory  &&  matchPrivacy && matchSearch;
+    })?.sort((a, b) => {
+    if (sortBy === "newest") {
+        return new Date(b.createAt) - new Date(a.createAt);
+    }
+
+    if (sortBy === "saved") {
+        return (b.favoritesCount || 0) - (a.favoritesCount || 0);
+    }
+
+    return 0;
+});
+
+console.log("fgerg",sortBy)
+
+
+ const indexOfLastLesson = currentPage * lessonsPerPage;
+  const indexOfFirstLesson = indexOfLastLesson - lessonsPerPage;
+  const currentLessons = filter.slice(indexOfFirstLesson, indexOfLastLesson);
+  const totalPages = Math.ceil(filter.length / lessonsPerPage);
+
+
   return (
     <div className='w-9/12 mx-auto my-10 min-h-screen'>
+      <div className='flex flex-col md:flex-row items-center gap-5'>
+        <input
+    type="text"
+    placeholder="Search lessons..."
+    className="input input-bordered w-full max-w-xs"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+                    <div className="dropdown dropdown-center">
+                      
+  <div tabIndex={0} role="button" className="btn m-1">Category </div>
+  <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+<li><a onClick={() => setCategory("")}>All</a></li>
+<li><a onClick={() => setCategory("Relationships")}>Relationships</a></li>
+<li><a onClick={() => setCategory("Personal Growth")}>Personal Growth</a></li>
+<li><a onClick={() => setCategory("Mistakes Learned")}>Mistakes Learned</a></li>
+<li><a onClick={() => setCategory("Mindset")}>Mindset</a></li>
+<li><a onClick={() => setCategory("Career")}>Career</a></li>
+  </ul>
+
+  
+</div>
+                    <div className="dropdown dropdown-center">
+  <div tabIndex={0} role="button" className="btn m-1">Tone </div>
+  <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+<li><a onClick={() => setTone("")}>All</a></li>
+<li><a onClick={() => setTone("Motivational")}>Motivational</a></li>
+<li><a onClick={() => setTone("Gratitude")}>Gratitude</a></li>
+<li><a onClick={() => setTone("Realization")}>Realization</a></li>
+<li><a onClick={() => setTone("Sad")}>Sad</a></li>
+  </ul>
+
+
+  
+</div>
+
+
+
+<div className="dropdown dropdown-center">
+  <div tabIndex={0} role="button" className="btn m-1">
+    Sort By
+  </div>
+  <ul className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+    <li><a onClick={() => setSortBy("")}>Default</a></li>
+<li><a onClick={() => setSortBy("newest")}>Newest</a></li>
+<li><a onClick={() => setSortBy("saved")}>Most Saved</a></li>
+
+  </ul>
+</div>
+
+
+                </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {publicLessons.map(lesson => {
+
+
+
+      {currentLessons.map(lesson => {
         const isPremiumLesson = lesson.accessLevel === 'Premium';
         const isPremiumUser = getUsers[0]?.isPremium === true
 
@@ -83,6 +185,29 @@ const PublicLessons = () => {
         );
       })}
     </div>
+          <div className="flex justify-center mt-6 gap-2">
+        <button
+          className="btn btn-sm"
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            className={`btn btn-sm ${currentPage === i + 1 ? 'btn-primary' : ''}`}
+            onClick={() => setCurrentPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button
+          className="btn btn-sm"
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >Next</button>
+      </div>
     </div>
     
   );

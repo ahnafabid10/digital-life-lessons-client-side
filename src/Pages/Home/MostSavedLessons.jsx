@@ -104,7 +104,6 @@ const MostSavedLessons = () => {
         <p className="text-sm text-base-content/80 mt-2 line-clamp-3">{lesson.description}</p>
         <div className="card-actions justify-between items-center mt-4">
             <span className="badge badge-outline badge-primary">{lesson.category}</span>
-        <button className="btn btn-sm btn-primary btn-outline">Read More</button>
             </div>
 
               </div>

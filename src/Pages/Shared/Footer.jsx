@@ -1,5 +1,6 @@
 import React from 'react';
 import Img from '../../assets/Gemini_Generated_Image_uaqoicuaqoicuaqo.png'
+import { FaXTwitter } from 'react-icons/fa6';
 
 const Footer = () => {
     return (
@@ -79,6 +80,11 @@ const Footer = () => {
                                 <path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.322a1.44 1.44 0 110-2.88 1.44 1.44 0 010 2.88z"></path>
                             </svg>
                         </a>
+                        <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity duration-300" title="X">
+                            <FaXTwitter className="w-6 h-6" />
+                        </a>
+
+
                     </div>
 
                     <div className="text-center md:text-right">

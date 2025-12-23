@@ -55,7 +55,7 @@ const Profile = () => {
           <div className="card-body items-center text-center -mt-10">
             <div className="avatar">
              <div className="w-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4">
-                            {userProfile[0]?.photoURL ? (
+                            {userProfile[0]?.photo ? (
                                 <img src={userProfile[0]?.photo || user?.photoURL} alt="" />
                             ) : (
                                 <div className="avatar">
