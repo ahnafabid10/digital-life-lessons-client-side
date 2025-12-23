@@ -5,6 +5,8 @@ import { Link, NavLink, Outlet } from 'react-router';
 import useRole from '../Hooks/useRole';
 import { RiAdminLine } from "react-icons/ri";
 import { GrUserAdmin } from "react-icons/gr";
+import { CiSaveDown2 } from "react-icons/ci";
+
 
 
 
@@ -63,7 +65,7 @@ const DashboardLayout = () => {
         <li>
             <NavLink className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Favourite"
              to='/dashboard/my-favourite'>
-              <MdOutlinePlayLesson></MdOutlinePlayLesson>
+              <CiSaveDown2  className='text-black'/>
               <span className="is-drawer-close:hidden">My Favourite</span></NavLink>
         </li>
         <li>
@@ -122,14 +124,7 @@ const DashboardLayout = () => {
 
         
 
-        {/* List item */}
-        <li>
-          <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
-            {/* Settings icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="my-1.5 inline-block size-4"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
-            <span className="is-drawer-close:hidden">Settings</span>
-          </button>
-        </li>
+        
       </ul>
     </div>
   </div>

@@ -32,13 +32,21 @@ const UpdateLessons = () => {
 
   console.log('mongodbuser', mongoUser)
 
-  const handleUpdate = async (data) => {
-    const res = await axiosSecure.put(`/lessons/${_id}`, [...data, {lastUpdate: new Date()}]);
+ const handleUpdate = async (data) => {
+  
+    const updatedData = {
+      ...data,
+      lastUpdate: new Date()
+    };
+
+    const res = await axiosSecure.put(`/lessons/${_id}`, updatedData);
     console.log('Updated:', res.data);
-    if(res.data.modifiedCount){
-        toast('update successful')
-    }
-  };
+    if (res.data.modifiedCount) {
+      toast.success('Update successful');
+    } 
+  
+};
+
 
   if (isLoading) return <LoadingPage></LoadingPage>;
 

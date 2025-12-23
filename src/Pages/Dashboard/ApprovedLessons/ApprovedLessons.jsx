@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { IoCheckboxOutline } from 'react-icons/io5';
-import { CiSquareRemove } from 'react-icons/ci';
+import { MdFeaturedPlayList } from "react-icons/md";
 import { FaRegTrashCan } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 
@@ -138,7 +138,7 @@ const ApprovedLessons = () => {
   
 </div>
                     <div className="dropdown dropdown-center">
-  <div tabIndex={0} role="button" className="btn m-1">Location </div>
+  <div tabIndex={0} role="button" className="btn m-1">Privacy</div>
   <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
 <li><a onClick={() => setPrivacy("")}>All</a></li>
 <li><a onClick={() => setPrivacy("Public")}>Public</a></li>
@@ -179,7 +179,7 @@ const ApprovedLessons = () => {
                 <IoCheckboxOutline />
             </button>
             <button onClick={()=>handleRejection(lesson)} className="btn mx-2">
-                <CiSquareRemove />
+                <MdFeaturedPlayList />
             </button>
             <button onClick={()=>handleDelete(lesson._id)} className="btn">
                 <FaRegTrashCan />

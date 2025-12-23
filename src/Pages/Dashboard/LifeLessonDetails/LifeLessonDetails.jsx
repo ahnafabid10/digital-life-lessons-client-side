@@ -40,7 +40,7 @@ const reason = watch("reason");
     const {_id} = useParams()
     console.log("show id", _id)
 
-    const {data: lessonDetails, isLoading, refetch} = useQuery({
+    const {data: lessonDetails, isLoading, refetch,} = useQuery({
         queryKey:['lessonDetails', _id],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/lessons/${_id}`)
@@ -70,6 +70,8 @@ const { data: similarByCategory = [] } = useQuery({
   }
 });
 
+
+
 const { data: similarByTone = [] } = useQuery({
   queryKey: ['similar-tone', lessonDetails?.tone],
   enabled: !!lessonDetails,
@@ -86,9 +88,6 @@ const { data: similarByTone = [] } = useQuery({
     console.log("hello lessons",lessons)
 
 
-
-     if (isLoading) 
-      return <LoadingPage></LoadingPage>;
 
      const handleLike = async () => {
   if (!user) {
@@ -142,17 +141,17 @@ const handleReport = async (data) => {
 
   Swal.fire({
   title: "Are you sure?",
-  text: "You won't be able to revert this!",
+   text: "Do you want to report this lesson?",
   icon: "warning",
   showCancelButton: true,
   confirmButtonColor: "#3085d6",
   cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, delete it!"
+  confirmButtonText: "Yes, report it!"
 }).then((result) => {
   if (result.isConfirmed) {
     Swal.fire({
-      title: "Deleted!",
-      text: "Your file has been deleted.",
+      title: "Reported!",
+      text: "The lesson has been reported successfully.",
       icon: "success"
     });
   }
@@ -164,6 +163,11 @@ const handleReport = async (data) => {
 const shareUrl = window.location.href;
 const shareTitle = lessonDetails?.title || "Check this lesson!";
 
+if(isLoading) return (
+            <div className='h-screen flex items-center justify-center text-center'>
+                <span className="loading loading-infinity loading-xl" />
+            </div>
+        );
 
     return (
         <div className="w-8/12 mx-auto min-h-screen my-10">
@@ -268,7 +272,42 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
     </span>
   </button>
     </div>
+   
+
     <div>
+
+
+    </div>
+
+    <div className="flex gap-2 my-4">
+  <FacebookShareButton url={shareUrl} quote={shareTitle}><FacebookIcon size={32} round />
+  </FacebookShareButton>
+
+  <TwitterShareButton url={shareUrl} title={shareTitle}><TwitterIcon size={32} round />
+  </TwitterShareButton>
+
+  <WhatsappShareButton url={shareUrl} title={shareTitle}><WhatsappIcon size={32} round />
+  </WhatsappShareButton>
+
+  <LinkedinShareButton url={shareUrl} title={shareTitle}><LinkedinIcon size={32} round />
+  </LinkedinShareButton>
+</div>
+
+  </div>
+  <div className="flex items-center gap-4 p-4 mt-10 border rounded-lg bg-base-100 shadow">
+      <img
+        src={lessonDetails?.photo}  alt={lessonDetails.name} className="w-16 h-16 rounded-full object-cover"/>
+
+      <div className="flex-1">
+  <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
+    <p className="text-sm text-gray-500">Total Lessons Created: {lessons?.length}</p>
+      </div>
+
+      <Link to={`/profilePage/${lessonDetails.mongoUserId}`}>
+        <button className="btn btn-outline btn-sm">View all lessons</button>
+      </Link>
+    </div>
+        <div>
 {similarByCategory.length > 0 && (
   <div className="mt-10">
     <h2 className="text-xl font-bold mb-4">Similar Lessons</h2>
@@ -333,42 +372,9 @@ const shareTitle = lessonDetails?.title || "Check this lesson!";
 
 
     </div>
-
-    <div>
-
-
-    </div>
-
-    <div className="flex gap-2 my-4">
-  <FacebookShareButton url={shareUrl} quote={shareTitle}><FacebookIcon size={32} round />
-  </FacebookShareButton>
-
-  <TwitterShareButton url={shareUrl} title={shareTitle}><TwitterIcon size={32} round />
-  </TwitterShareButton>
-
-  <WhatsappShareButton url={shareUrl} title={shareTitle}><WhatsappIcon size={32} round />
-  </WhatsappShareButton>
-
-  <LinkedinShareButton url={shareUrl} title={shareTitle}><LinkedinIcon size={32} round />
-  </LinkedinShareButton>
-</div>
-
-  </div>
-  <div className="flex items-center gap-4 p-4 mt-10 border rounded-lg bg-base-100 shadow">
-      <img
-        src={lessonDetails?.photo}  alt={lessonDetails.name} className="w-16 h-16 rounded-full object-cover"/>
-
-      <div className="flex-1">
-  <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
-    <p className="text-sm text-gray-500">Total Lessons Created: {lessons?.length}</p>
-      </div>
-
-      <Link to={`/profilePage/${lessonDetails.mongoUserId}`}>
-        <button className="btn btn-outline btn-sm">View all lessons</button>
-      </Link>
-    </div>
     <div>
       <Comment></Comment>
+   
     </div>
     <ToastContainer></ToastContainer>
         </div>
