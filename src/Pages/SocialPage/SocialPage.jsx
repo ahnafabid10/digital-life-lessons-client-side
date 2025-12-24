@@ -14,7 +14,15 @@ const SocialPage = () => {
         googleSignIn()
         .then(res=>{
             console.log(res.user);
-            navigate( location?.state || '/');
+            const loggedUser = res.user;
+            const userInfo = {
+        name: loggedUser.displayName,
+        email: loggedUser.email,
+        photo: loggedUser.photoURL,
+        uid: loggedUser.uid,
+        isPremium: false
+      };
+            
             
 
         // axiosSecure.post('/user', {name: res.user.displayName, email: res.user.email, photoURL:res.user.photoURL})
@@ -23,7 +31,8 @@ const SocialPage = () => {
         // )
         
 
-        axiosSecure.post('/users', {name: user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
+        axiosSecure.post('/users', userInfo)
+        // axiosSecure.post('/users', {name: user.displayName, email: res.user.email, userId:res.user.uid, isPremium: false})
         .then(res=>{
             console.log('added user info', res.data)})   
             
@@ -31,6 +40,7 @@ const SocialPage = () => {
         .catch(error=>{
             console.log(error)
         })
+        navigate( location?.state || '/');
     }
 
 
