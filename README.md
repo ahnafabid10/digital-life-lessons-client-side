@@ -2,6 +2,8 @@
 
 A platform where users can **create, store, and share meaningful life lessons**, personal growth insights, and wisdom gathered over time. Users can organize lessons, mark favorites, track learning progress, and explore public lessons shared by others.
 
+Server site repo: https://github.com/ahnafabid10/digital-life-lessons-server-side/tree/my-new-branch<br>
+
 Live Site: https://digital-life-lesson11.netlify.app/
 
 ---
@@ -12,6 +14,7 @@ Live Site: https://digital-life-lesson11.netlify.app/
 - Technology Stack
 - Project Structure
 - Pages & Functionality
+- Installation
 
 ---
 
@@ -127,4 +130,32 @@ Here’s a quick overview of the main sections:
 - Responsive layout
 - Dark/Light mode toggle (optional)
 - Social sharing and PDF export (optional)
+
+## Installation
+  ```bash
+  # Clone the repository
+git clone https://github.com/yourusername/digital-life-lessons-client-side.git
+
+# Navigate into the project directory
+cd digital-life-lessons-client-side
+
+# Install dependencies
+npm install
+
+# Create a `.env` file in the root directory
+# Add your Firebase, MongoDB, and Stripe credentials
+VITE_apiKey=your_api_key
+VITE_authDomain=your_auth_domain
+VITE_projectId=your_project_id
+VITE_storageBucket=your_storageBucket
+VITE_messagingSenderId= your_messagingSenderId
+VITE_appId= your_appId
+
+# Run the development server
+npm run dev
+
+# Build and preview production version
+npm run build
+npm run preview
+
 
