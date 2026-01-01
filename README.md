@@ -134,7 +134,7 @@ Here’s a quick overview of the main sections:
 ## Installation
   ```bash
   # Clone the repository
-git clone https://github.com/yourusername/digital-life-lessons-client-side.git
+git clone https://github.com/ahnafabid10/digital-life-lessons-client-side.git
 
 # Navigate into the project directory
 cd digital-life-lessons-client-side
@@ -143,7 +143,7 @@ cd digital-life-lessons-client-side
 npm install
 
 # Create a `.env` file in the root directory
-# Add your Firebase, MongoDB, and Stripe credentials
+# Add your Firebase
 VITE_apiKey=your_api_key
 VITE_authDomain=your_auth_domain
 VITE_projectId=your_project_id
