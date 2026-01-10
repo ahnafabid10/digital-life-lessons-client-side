@@ -1,40 +1,150 @@
 import React from 'react';
+import { FaLightbulb, FaHeart, FaBullseye, FaCompass } from 'react-icons/fa';
 
 const LifeMatters = () => {
-    return (
-        <div className='bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30'>
-            <div className="py-16">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-12">
-     <h2 className="text-3xl md:text-4xl font-bold text-purple">Why Learning From Life Matters</h2>
-    <p className="mt-3 text-gray-300 max-w-2xl mx-auto">Life itself is the best teacher. Every experience helps us grow, understand ourselves, and move forward wisely.</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-    <h3 className="text-xl font-semibold mb-2 text-purple-800">Real-Life Experience</h3>
-    <p className="text-sm text-gray-600">Life teaches practical lessons through real situations that no textbook can fully explain.</p>
+  const cards = [
+    {
+      Icon: FaLightbulb,
+      title: "Real-Life Experience",
+      description: "Life teaches practical lessons through real situations that no textbook can fully explain.",
+      accentColor: "bg-amber-500",
+      glowColor: "shadow-amber-500/50"
+    },
+    {
+      Icon: FaHeart,
+      title: "Emotional Growth",
+      description: "Facing challenges builds patience, empathy, and emotional strength over time.",
+      accentColor: "bg-rose-500",
+      glowColor: "shadow-rose-500/50"
+    },
+    {
+      Icon: FaBullseye,
+      title: "Better Decision Making",
+      description: "Past mistakes and successes guide smarter and more confident choices.",
+      accentColor: "bg-cyan-500",
+      glowColor: "shadow-cyan-500/50"
+    },
+    {
+      Icon: FaCompass,
+      title: "Clear Life Direction",
+      description: "Life lessons help define values, priorities, and long-term goals.",
+      accentColor: "bg-indigo-500",
+      // glowColor: "shadow-indigo-500/50"
+    }
+  ];
+
+  return (
+    <div className='relative bg-gradient-to-br from-primary via-secondary to-primary text-white overflow-hidden'>
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-5"></div>
+      </div>
+
+      <div className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-16 animate-fade-in">
+            <div className="inline-block mb-6">
+              <div className="badge badge-lg bg-white text-primary border-0 font-bold tracking-wide uppercase shadow-xl px-6 py-4">
+                Life Wisdom
+              </div>
+            </div>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
+              Why Learning From Life Matters
+            </h2>
+            <p className="text-lg sm:text-xl text-white text-opacity-90 max-w-3xl mx-auto leading-relaxed">
+              Life itself is the best teacher. Every experience helps us grow, understand ourselves, and move forward wisely.
+            </p>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-    <h3 className="text-xl font-semibold mb-2 text-purple-800">Emotional Growth</h3>
-    <p className="text-sm text-gray-600"> Facing challenges builds patience, empathy, and emotional strength over time.</p>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {cards.map((card, index) => {
+              const { Icon } = card;
+              return (
+                <div
+                  key={index}
+                  className="group relative"
+                  style={{
+                    animation: `slideUp 0.6s ease-out ${index * 0.15}s both`
+                  }}
+                >
+                  {/* Hover glow effect */}
+                  {/* <div className={`absolute -inset-1 ${card.accentColor} rounded-3xl opacity-0 group-hover:opacity-20 blur-xl transition duration-500`}></div> */}
+                  
+                  {/* Card */}
+                  <div className="card bg-white shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 h-full relative overflow-hidden">
+                    {/* Decorative top stripe */}
+                    <div className={`absolute top-0 left-0 right-0 h-1.5 ${card.accentColor}`}></div>
+                    
+                    <div className="card-body p-8">
+                      {/* Icon */}
+                      <div className={`inline-flex p-5 rounded-2xl ${card.accentColor} bg-opacity-10 mb-5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 w-fit`}>
+                        <Icon className={`w-10 h-10 ${card.accentColor.replace('bg-', 'text-')}`} />
+                      </div>
+                      
+                      <h3 className="card-title text-2xl font-bold mb-4 text-secondary group-hover:text-primary transition-colors duration-300">
+                        {card.title}
+                      </h3>
+                      
+                      <p className="text-gray-600 leading-relaxed text-base flex-grow">
+                        {card.description}
+                      </p>
+
+                      {/* Animated bottom line */}
+                      <div className="card-actions justify-start mt-6">
+                        <div className={`h-1 w-12 ${card.accentColor} rounded-full group-hover:w-full transition-all duration-500`}></div>
+                      </div>
+                    </div>
+
+                    {/* Background pattern */}
+                    <div className="absolute bottom-0 right-0 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                      <Icon className="w-full h-full text-secondary" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-    <h3 className="text-xl font-semibold mb-2 text-purple-800">Better Decision Making</h3>
-     <p className="text-sm text-gray-600">Past mistakes and successes guide smarter and more confident choices.</p>
+          {/* Bottom CTA Section */}
+          <div className="text-center mt-20 animate-fade-in" style={{animationDelay: '0.8s'}}>
+            <button className="btn btn-lg bg-white text-primary border-0 hover:bg-opacity-90 shadow-2xl hover:shadow-white/30 transition-all  hover:scale-105 font-bold px-10">
+              Start Your Journey
+              <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
           </div>
-
-          <div className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-    <h3 className="text-xl font-semibold mb-2 text-purple-800">Clear Life Direction</h3>
-    <p className="text-sm text-gray-600">Life lessons help define values, priorities, and long-term goals.</p>
-          </div>
-
         </div>
       </div>
+
+      <style>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+      //   @keyframes fadeIn {
+      //     from {
+      //       opacity: 0;
+      //     }
+      //     to {
+      //       opacity: 1;
+      //     }
+      //   }
+        
+        .animate-fade-in {
+          animation: fadeIn 1.2s ease-out;
+        }
+      `}</style>
     </div>
-        </div>
-    
   );
 };
 

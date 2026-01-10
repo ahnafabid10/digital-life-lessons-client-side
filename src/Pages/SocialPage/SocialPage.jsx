@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const SocialPage = () => {
-    const {googleSignIn, user} = useAuth();
+    const {googleSignIn,} = useAuth();
     const axiosSecure = useAxiosSecure();
     const location = useLocation();
     const navigate = useNavigate();

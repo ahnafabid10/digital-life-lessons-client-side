@@ -2,92 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useAuth } from '../../Hooks/useAuth';
-
-
-
-
-// const TopContributors = () => {
-//   const axiosSecure = useAxiosSecure()
-// const { data: contributors = [] } = useQuery({
-//   queryKey: ['contributors'],
-//   queryFn: async () => {
-//     const res = await axiosSecure.get('/lessons/top-contributors');
-//     return res.data;
-//   }
-// });
-
-
-//     return (
-//         <div className='bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30'>
-//             <div className=" p-8 rounded-xl max-w-7xl mx-auto">
-//       <h2 className="text-3xl md:text-4xl text-white font-bold mb-8 text-center">Top Contributors of the Week</h2>
-
-//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-//         {contributors?.map((contributor, index) => (
-//   <div className='justify-center items-center my-2' key={index}>
-//     <img className='h-[200px] w-[200px] rounded-full mb-2' src={contributor?.avatar} alt={contributor?.name} />
-//     <p className=''>{contributor?.name}</p>
-//   </div>
-// ))}
-
-//       </div>
-//     </div>
-//         </div>
-//     );
-// };
-// const TopContributors = () => {
-//   const { user } = useAuth();
-//   const axiosSecure = useAxiosSecure()
-//   const { data: contributors = [] } = useQuery({
-//     queryKey: ['contributors'],
-//     queryFn: async () => {
-//       const res = await axiosSecure.get('/lessons/top-contributors');
-//       return res.data;
-//     }
-//   });
-
-//   if (!user) {
-//     return (
-//       <div className="text-center py-10 bg-base-100">
-//         <h3 className="text-2xl font-bold">Top Contributors</h3>
-//         <p className="text-base-content/70 mt-2">Sign in to see full profiles.</p>
-//         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-//           {contributors.map(c => (
-//             <div key={c.email} className="flex flex-col items-center">
-//               <img className="h-24 w-24 rounded-full" src={c.avatar} alt={c.name} />
-//               <p>{c.name}</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // Logged-in users see full view
-//   return (
-//     <div className="bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30">
-//       <div className="p-8 rounded-xl max-w-7xl mx-auto">
-//         <h2 className="text-3xl md:text-4xl text-white font-bold mb-8 text-center">
-//           Top Contributors of the Week
-//         </h2>
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-//           {contributors?.map((contributor, index) => (
-//             <div key={index} className="justify-center items-center my-2">
-//               <img
-//                 className="h-[200px] w-[200px] border-2 border-white rounded-full mb-2"
-//                 src={contributor?.avatar}
-//                 alt={contributor?.name}
-//               />
-//               <p>{contributor?.name}</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-
+import { FaTrophy } from 'react-icons/fa';
 
 const TopContributors = () => {
   const { user } = useAuth();
@@ -102,35 +17,97 @@ const TopContributors = () => {
   });
 
   return (
-    <div className="bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30">
-      <div className="p-8 rounded-xl max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl text-white font-bold mb-8 text-center">
-          Top Contributors of the Week
-        </h2>
-        {!user && (
-          <p className="text-base-content/70 text-center mb-6">
-            Sign in to see full profiles.
+    <div className="relative bg-gradient-to-br from-primary via-secondary to-primary text-white overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-5"></div>
+      </div>
+
+      <div className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-6 py-2 rounded-full mb-6 border border-white/20">
+            <FaTrophy className="text-white w-4 h-4" />
+            <span className="text-white font-semibold text-sm uppercase tracking-wider">This Week</span>
+          </div>
+          
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white drop-shadow-lg">
+            Top Contributors
+          </h2>
+          
+          <p className="text-lg text-white/90 max-w-2xl mx-auto">
+            Celebrating the amazing people who share valuable life lessons with our community
           </p>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        </div>
+
+        {/* Contributors Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {contributors.map((contributor, index) => (
-            <div key={index} className="flex flex-col items-center my-2">
-              <img
-                className={`rounded-full mb-2 ${
-                  user ? 'h-[200px] w-[200px] border-2 border-white' : 'h-24 w-24'
-                }`}
-                src={contributor?.avatar}
-                alt={contributor?.name}
-              />
-              <p>{contributor?.name}</p>
+            <div 
+              key={index} 
+              className="group text-center"
+              style={{
+                animation: `fadeIn 0.5s ease-out ${index * 0.1}s both`
+              }}
+            >
+              {/* Card */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+                
+                {/* Rank Badge */}
+                <div className="absolute top-4 right-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-lg ${
+                    index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
+                    index === 1 ? 'bg-gradient-to-br from-gray-400 to-gray-500' :
+                    index === 2 ? 'bg-gradient-to-br from-amber-600 to-orange-700' :
+                    'bg-gradient-to-br from-primary to-secondary'
+                  }`}>
+                    {index + 1}
+                  </div>
+                </div>
+
+                {/* Avatar */}
+                <div className="mb-6 flex justify-center">
+                  <div className={`rounded-full overflow-hidden ring-4 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 ${
+                    user ? 'w-40 h-40' : 'w-28 h-28'
+                  }`}>
+                    <img
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      src={contributor?.avatar}
+                      alt={contributor?.name}
+                    />
+                  </div>
+                </div>
+
+                {/* Name */}
+                <h3 className={`font-bold text-gray-800 group-hover:text-primary transition-colors ${
+                  user ? 'text-2xl' : 'text-lg'
+                }`}>
+                  {contributor?.name}
+                </h3>
+
+                {/* Bottom accent */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
-
-
 
 export default TopContributors;
