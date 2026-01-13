@@ -4,10 +4,8 @@ import { useAuth } from './useAuth';
 import { useNavigate } from 'react-router';
 
 const axiosSecure = axios.create({
-  // baseURL: 'http://localhost:3000',
-  baseURL: 'https://digital-life-lessons-server-side1.vercel.app',
-  timeout: 1000,
-  headers: {'X-Custom-Header': 'foobar'}
+  baseURL: 'http://localhost:3000',
+  // baseURL: 'https://digital-life-lessons-server-side1.vercel.app',
 });
 
 const useAxiosSecure = () => {

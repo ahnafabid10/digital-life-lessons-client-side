@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../Hooks/useAuth';
 import { useQuery} from '@tanstack/react-query';
@@ -9,7 +9,21 @@ import Img from '../../assets/Gemini_Generated_Image_uaqoicuaqoicuaqo.png'
 const NavBar = () => {
 
   const axiosSecure = useAxiosSecure()
-    const {user, logOut} = useAuth();
+  const {user, logOut} = useAuth();
+  
+  // Initialize theme from HTML data-theme attribute or default to 'light'
+  const [theme, setTheme] = useState(() => {
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  });
+
+  // Update the HTML data-theme attribute when theme changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
 
 
 const {data: userPlan =[]} = useQuery({
@@ -82,7 +96,7 @@ const {data: userPlan =[]} = useQuery({
     </>
 
     return (
-        <div className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 border-b border-primary/10 shadow-sm">
+        <div className="sticky top-0 z-50 w-full backdrop-blur-md bg-base-100/90 border-b border-primary/10 shadow-sm">
             <div className="navbar max-w-7xl mx-auto px-4 py-2">
   <div className="navbar-start">
     <div className="dropdown">
@@ -93,7 +107,7 @@ const {data: userPlan =[]} = useQuery({
       </div>
       <ul
         tabIndex={0}
-        className="menu menu-sm dropdown-content bg-white rounded-2xl z-[100] mt-3 w-64 p-3 shadow-2xl border border-primary/20">
+        className="menu menu-sm dropdown-content bg-base-100 rounded-2xl z-[100] mt-3 w-64 p-3 shadow-2xl border border-primary/20">
         {links}
       </ul>
     </div>
@@ -114,6 +128,26 @@ const {data: userPlan =[]} = useQuery({
   </div>
   
   <div className="navbar-end gap-2 sm:gap-3">
+    {/* Theme Toggle Button */}
+    <button 
+      onClick={toggleTheme}
+      className="btn btn-ghost btn-circle hover:bg-primary/10 transition-all duration-300"
+      aria-label="Toggle theme"
+      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+    >
+      {theme === 'light' ? (
+        // Moon icon for dark mode
+        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      ) : (
+        // Sun icon for light mode
+        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )}
+    </button>
+
     {
     user 
     ? 
@@ -146,7 +180,7 @@ const {data: userPlan =[]} = useQuery({
             <img src={user.photoURL} alt="User" />
           </div>
         </div>
-        <ul tabIndex={0} className="dropdown-content menu bg-white rounded-2xl z-[100] w-64 p-4 shadow-2xl border border-primary/20 mt-4">
+        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-2xl z-[100] w-64 p-4 shadow-2xl border border-primary/20 mt-4">
           <li className="px-4 py-3 font-bold text-lg border-b border-primary/10 mb-2 pointer-events-none bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {user.displayName}
           </li>

@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
         },
         {
           path: '/pricing',
-          element: <PrivateRoutes><Pricing></Pricing></PrivateRoutes>
+          element: <Pricing></Pricing>
         },
         {
           path: '/login',
@@ -59,11 +59,11 @@ export const router = createBrowserRouter([
         },
         {
           path:'/profilePage/:_id',
-          element: <PrivateRoutes><ProfilePage></ProfilePage></PrivateRoutes>
+          element: <ProfilePage></ProfilePage>
         },
         {
           path:`/lessonsDetails/:_id`,
-          element: <PrivateRoutes><LifeLessonDetails></LifeLessonDetails></PrivateRoutes>,
+          element:<LifeLessonDetails></LifeLessonDetails>
             // loader: ({params}) => fetch(`http:localhost:3000/lessons/${params.id}`)
         },
         
