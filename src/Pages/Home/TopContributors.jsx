@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { Link } from 'react-router';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { useAuth } from '../../Hooks/useAuth';
 import { FaTrophy, FaMedal, FaStar, FaAward } from 'react-icons/fa';
 
 const TopContributors = () => {
-  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
 
   const { data: contributors = [] } = useQuery({
@@ -59,15 +58,16 @@ const TopContributors = () => {
         {/* Contributors Grid - 4 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {contributors.map((contributor, index) => (
-            <div 
-              key={index} 
-              className="group"
+            <Link
+              key={index}
+              to={`/profile/${contributor?._id || contributor?.userId}`}
+              className="group block"
               style={{
                 animation: `fadeInScale 0.6s ease-out ${index * 0.08}s both`
               }}
             >
               {/* Card */}
-              <div className="relative bg-base-100 rounded-2xl p-6 shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20">
+              <div className="relative bg-base-100 rounded-2xl p-6 shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20 cursor-pointer">
                 
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -84,7 +84,7 @@ const TopContributors = () => {
                   <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-primary/20 group-hover:ring-primary/40 dark:ring-primary/30 dark:group-hover:ring-primary/50 transition-all duration-300">
                     <img
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      src={contributor?.avatar || user?.photoURL}
+                      src={contributor?.photo}
                       alt={contributor?.name}
                     />
                   </div>
@@ -96,18 +96,23 @@ const TopContributors = () => {
                     {contributor?.name}
                   </h3>
                   
-                  {/* Contribution Count (if available) */}
+                  {/* Contribution Count */}
                   {contributor?.lessonCount && (
                     <p className="text-sm text-base-content/60 font-medium">
                       {contributor.lessonCount} {contributor.lessonCount === 1 ? 'Lesson' : 'Lessons'}
                     </p>
                   )}
+
+                  {/* View Profile Hint */}
+                  <p className="text-xs text-primary/70 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Click to view profile
+                  </p>
                 </div>
 
                 {/* Bottom gradient line */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

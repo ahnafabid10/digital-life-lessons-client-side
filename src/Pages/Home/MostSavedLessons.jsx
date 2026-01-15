@@ -10,7 +10,7 @@ const MostSavedLessons = () => {
   const { data: lessons = [], isLoading } = useQuery({
     queryKey: ['mostSavedLessons'],
     queryFn: async () => {
-      const res = await axiosSecure.get('/lessons/most-saved');
+      const res = await axiosSecure.get('/lessons');
       return res.data;
     }
   });
@@ -86,7 +86,7 @@ const MostSavedLessons = () => {
         {/* Cards Grid */}
         {!isLoading && lessons.length > 0 && (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {lessons.map((lesson, index) => (
+            {lessons.sort((a, b) => (b.favoritesCount || 0) - (a.favoritesCount || 0)).slice(0, 8).map((lesson, index) => (
               <div 
                 key={lesson.id} 
                 className="group relative bg-base-100 rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20 flex flex-col min-h-[280px]"
@@ -156,17 +156,6 @@ const MostSavedLessons = () => {
           </div>
         )}
 
-        {/* View All Button */}
-        {!isLoading && lessons.length > 0 && (
-          <div className="text-center mt-16">
-            <Link to="/publicLessons">
-              <button className="btn btn-lg bg-gradient-to-r from-primary to-secondary text-white border-0 rounded-full font-bold px-10 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl group">
-                Explore All Lessons
-                <FaArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform" />
-              </button>
-            </Link>
-          </div>
-        )}
       </section>
 
       <style>{`

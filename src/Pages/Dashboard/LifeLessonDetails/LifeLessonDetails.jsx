@@ -3,8 +3,8 @@ import React from 'react';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { Link, useParams } from 'react-router';
 import { useAuth } from '../../../Hooks/useAuth';
-import { FaHeart, FaRegBookmark, FaRegHeart } from 'react-icons/fa';
-import { MdOutlineReport } from "react-icons/md";
+import { FaHeart, FaRegBookmark, FaRegHeart, FaClock, FaCalendarAlt } from 'react-icons/fa';
+import { MdOutlineReport, MdUpdate } from "react-icons/md";
 import LoadingPage from '../../LoadingPage/LoadingPage';
 import Comment from '../Comment/Comment';
 import { toast, ToastContainer } from 'react-toastify';
@@ -21,9 +21,6 @@ import {
   LinkedinIcon
 } from "react-share";
 
-
-
-
 const LifeLessonDetails = () => {
     const {
   register,
@@ -34,17 +31,14 @@ const LifeLessonDetails = () => {
 
 const reason = watch("reason");
 
-
     const axiosSecure = useAxiosSecure()
     const {user} = useAuth()
     const {_id} = useParams()
-    console.log("show id", _id)
 
     const {data: lessonDetails, isLoading, refetch,} = useQuery({
         queryKey:['lessonDetails', _id],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/lessons/${_id}`)
-            console.log('lesson details', res.data)
             return res.data;
         }
     })
@@ -52,8 +46,6 @@ const reason = watch("reason");
         queryKey:['lesson', user?.email],
         queryFn: async()=>{
             const res = await axiosSecure.get(`/lessons/?email=${user.email}`)
-            console.log('lesson details', res.data)
-            
             return res.data;
         }
     })
@@ -70,8 +62,6 @@ const { data: similarByCategory = [] } = useQuery({
   }
 });
 
-
-
 const { data: similarByTone = [] } = useQuery({
   queryKey: ['similar-tone', lessonDetails?.tone],
   enabled: !!lessonDetails,
@@ -83,12 +73,6 @@ const { data: similarByTone = [] } = useQuery({
   }
 });
 
-
-
-    console.log("hello lessons",lessons)
-
-
-
      const handleLike = async () => {
   if (!user) {
     toast.error('Please log in to like');
@@ -97,7 +81,6 @@ const { data: similarByTone = [] } = useQuery({
 
   const res = await axiosSecure.patch(`/lessons/${_id}/like`, {
     userId: user.uid,
-    
   });
 
   if (res.data.modifiedCount) {
@@ -122,8 +105,6 @@ const handleFavorite = async () => {
 
   refetch();
 };
-
-
 
 const handleReport = async (data) => {
   if (!user) {
@@ -159,7 +140,6 @@ const handleReport = async (data) => {
   reset();
 };
 
-
 const shareUrl = window.location.href;
 const shareTitle = lessonDetails?.title || "Check this lesson!";
 
@@ -170,213 +150,249 @@ if(isLoading) return (
         );
 
     return (
-        <div className="w-8/12 mx-auto min-h-screen my-10">
-             <div >
-              <div className='flex justify-between'>
-                  <h2 className="text-2xl font-bold mb-4">{lessonDetails?.title}</h2>
-<div className="dropdown dropdown-end">
-  <label tabIndex={0} className="btn btn-ghost">
-    <MdOutlineReport className="w-6 h-6" />
-  </label>
-  <form
-    onSubmit={handleSubmit(handleReport)}
-    tabIndex={0}
-    className="dropdown-content bg-base-100 rounded-box z-10 w-64 p-4 shadow"
-  >
-    <select
-      className="select select-bordered w-full"
-      {...register("reason", { required: true })}
-    >
-      <option value="">Select report reason</option>
-      <option value="Inappropriate Content">Inappropriate Content</option>
-      <option value="Hate Speech or Harassment">Hate Speech or Harassment</option>
-      <option value="Misleading Information">Misleading Information</option>
-      <option value="Spam">Spam</option>
-      <option value="Sensitive Content">Sensitive Content</option>
-      <option value="Other">Other</option>
-    </select>
-
-    {reason && (
-      <button type="submit" className="bg-gradient-to-r from-primary to-secondary text-white border-t border-white border-opacity-30 btn my-2 text-center justify-center">Submit Report</button>
-    )}
-  </form>
-</div>
-
+        <div className="w-full max-w-5xl mx-auto min-h-screen my-10 px-4">
+             {/* Header Section with gradient background */}
+             <div className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 rounded-2xl p-8 mb-8 shadow-lg border border-base-300">
+              <div className='flex justify-between items-start mb-6'>
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent pr-4">
+                    {lessonDetails?.title}
+                  </h1>
                   
-                  {/* <div className="dropdown dropdown-end">
-  <div tabIndex={0} role="button" className="m-1"><MdOutlineReport className='h-10 w-10'/></div>
-  <form action="">
-<ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-    <select>
-      <option>Select Your Option</option>
-      <option>Inappropriate Content</option>
-<option>Hate Speech or Harassment</option>
-<option>Misleading Information</option>
-<option>Spam</option>
-<option>Sensitive Content</option>
-<option>Other</option>
+                  {/* Report Dropdown */}
+                  <div className="dropdown dropdown-end">
+                    <label tabIndex={0} className="btn btn-ghost btn-circle hover:bg-error/10">
+                      <MdOutlineReport className="w-6 h-6 text-error" />
+                    </label>
+                    <div
+                      tabIndex={0}
+                      className="dropdown-content bg-base-100 rounded-2xl z-10 w-72 p-5 shadow-xl border border-base-300"
+                    >
+                      <h3 className="font-semibold mb-3 text-lg">Report This Lesson</h3>
+                      <select
+                        className="select select-bordered w-full mb-3"
+                        {...register("reason", { required: true })}
+                      >
+                        <option value="">Select report reason</option>
+                        <option value="Inappropriate Content">Inappropriate Content</option>
+                        <option value="Hate Speech or Harassment">Hate Speech or Harassment</option>
+                        <option value="Misleading Information">Misleading Information</option>
+                        <option value="Spam">Spam</option>
+                        <option value="Sensitive Content">Sensitive Content</option>
+                        <option value="Other">Other</option>
+                      </select>
 
-    </select>
-
-  </ul>
-
-  <button>Submit</button>
-  </form>
-  
-</div> */}
-
-
+                      {reason && (
+                        <button onClick={handleSubmit(handleReport)} className="btn btn-error text-white w-full">
+                          Submit Report
+                        </button>
+                      )}
+                    </div>
+                  </div>
               </div>
 
-    <div className="flex items-center gap-3 mb-4">
-      <img
-        src={lessonDetails?.photo}
-        className="w-10 h-10 rounded-full"
-        alt=""/>
-      <p>{lessonDetails?.name}</p>
-    </div>
+              {/* Author Info */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="avatar">
+                  <div className="w-14 h-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                    <img src={lessonDetails?.photo} alt={lessonDetails?.name} />
+                  </div>
+                </div>
+                <div>
+                  <p className="font-semibold text-lg">{lessonDetails?.name}</p>
+                  <p className="text-sm text-base-content/60">Life Lesson Author</p>
+                </div>
+              </div>
 
-    <p className="text-gray-500 mb-2">Date: {lessonDetails?.createAt}</p>
-    <p className="text-gray-500 mb-2">Last Update: {lessonDetails?.lastUpdate}</p>
+              {/* Date Info with Icons */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center gap-3 bg-base-100/50 backdrop-blur-sm rounded-xl p-4 border border-base-300/50">
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <FaCalendarAlt className="text-primary text-xl" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-base-content/60 font-medium">Created On</p>
+                    <p className="font-semibold">{lessonDetails?.createAt}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 bg-base-100/50 backdrop-blur-sm rounded-xl p-4 border border-base-300/50">
+                  <div className="bg-secondary/10 p-3 rounded-lg">
+                    <MdUpdate className="text-secondary text-xl" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-base-content/60 font-medium">Last Updated</p>
+                    <p className="font-semibold">{lessonDetails?.lastUpdate}</p>
+                  </div>
+                </div>
+              </div>
 
-        <div className="my-4 flex gap-2">
-<span className="badge">{lessonDetails?.category}</span>
-<span className="badge">{lessonDetails?.tone}</span>
-<span className="badge badge-primary">{lessonDetails?.accessLevel}</span>
-    </div>
+              {/* Tags/Badges */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                <span className="badge badge-lg badge-primary gap-2 px-4 py-3">
+                  {lessonDetails?.category}
+                </span>
+                <span className="badge badge-lg badge-secondary gap-2 px-4 py-3">
+                  {lessonDetails?.tone}
+                </span>
+                <span className="badge badge-lg badge-accent gap-2 px-4 py-3">
+                  {lessonDetails?.accessLevel}
+                </span>
+              </div>
 
-    <p>{lessonDetails?.description}</p>
+              {/* Description */}
+              <div className="prose max-w-none">
+                <p className="text-base leading-relaxed">{lessonDetails?.description}</p>
+              </div>
 
-      <div className="my-4 flex gap-2">
-<div>
-  <button onClick={handleLike} className="btn btn-outline flex gap-2">
-    {lessonDetails?.likes?.includes(user?.uid)
-      ? <FaHeart className="text-red-500" />
-      : <FaRegHeart />
-    }
-    <span>Like</span>
-    <span className="badge badge-neutral">
-      {lessonDetails?.likes?.length || 0}
-    </span>
-  </button>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 mt-6">
+                <button onClick={handleLike} className="btn btn-outline gap-2 hover:btn-primary">
+                  {lessonDetails?.likes?.includes(user?.uid)
+                    ? <FaHeart className="text-red-500" />
+                    : <FaRegHeart />
+                  }
+                  <span>Like</span>
+                  <span className="badge badge-neutral">
+                    {lessonDetails?.likes?.length || 0}
+                  </span>
+                </button>
 
-</div>
-   <button
-    onClick={handleFavorite}
-    className="btn btn-outline flex gap-2"
-  >
-    <FaRegBookmark />
-    <span>Save</span>
-    <span className="badge badge-neutral">
-      {lessonDetails?.favorites?.length || 0}
-    </span>
-  </button>
-    </div>
-   
+                <button onClick={handleFavorite} className="btn btn-outline gap-2 hover:btn-secondary">
+                  <FaRegBookmark />
+                  <span>Save</span>
+                  <span className="badge badge-neutral">
+                    {lessonDetails?.favorites?.length || 0}
+                  </span>
+                </button>
+              </div>
 
-    <div>
+              {/* Share Buttons */}
+              <div className="mt-6 pt-6 border-t border-base-300">
+                <p className="text-sm font-medium mb-3 text-base-content/70">Share this lesson:</p>
+                <div className="flex gap-3">
+                  <FacebookShareButton url={shareUrl} quote={shareTitle}>
+                    <FacebookIcon size={40} round />
+                  </FacebookShareButton>
 
+                  <TwitterShareButton url={shareUrl} title={shareTitle}>
+                    <TwitterIcon size={40} round />
+                  </TwitterShareButton>
 
-    </div>
+                  <WhatsappShareButton url={shareUrl} title={shareTitle}>
+                    <WhatsappIcon size={40} round />
+                  </WhatsappShareButton>
 
-    <div className="flex gap-2 my-4">
-  <FacebookShareButton url={shareUrl} quote={shareTitle}><FacebookIcon size={32} round />
-  </FacebookShareButton>
+                  <LinkedinShareButton url={shareUrl} title={shareTitle}>
+                    <LinkedinIcon size={40} round />
+                  </LinkedinShareButton>
+                </div>
+              </div>
+            </div>
 
-  <TwitterShareButton url={shareUrl} title={shareTitle}><TwitterIcon size={32} round />
-  </TwitterShareButton>
+            {/* Author Card */}
+            <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-6 mb-8 shadow-lg border border-base-300 hover:shadow-xl transition-shadow">
+              <div className="flex items-center gap-6">
+                <div className="avatar">
+                  <div className="w-20 h-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4">
+                    <img src={lessonDetails?.photo} alt={lessonDetails?.name} />
+                  </div>
+                </div>
 
-  <WhatsappShareButton url={shareUrl} title={shareTitle}><WhatsappIcon size={32} round />
-  </WhatsappShareButton>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-1">{lessonDetails?.name}</h3>
+                  <p className="text-base-content/70 flex items-center gap-2">
+                    <span className="badge badge-ghost">Total Lessons Created: {lessons?.length}</span>
+                  </p>
+                </div>
 
-  <LinkedinShareButton url={shareUrl} title={shareTitle}><LinkedinIcon size={32} round />
-  </LinkedinShareButton>
-</div>
+                <Link to={`/profilePage/${lessonDetails?.mongoUserId}`}>
+                  <button className="btn btn-primary">View All Lessons</button>
+                </Link>
+              </div>
+            </div>
 
-  </div>
-  <div className="flex items-center gap-4 p-4 mt-10 border rounded-lg bg-base-100 shadow">
-      <img
-        src={lessonDetails?.photo}  alt={lessonDetails.name} className="w-16 h-16 rounded-full object-cover"/>
+            {/* Similar Lessons */}
+            {similarByCategory.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Similar Lessons
+                </h2>
 
-      <div className="flex-1">
-  <h3 className="text-lg font-semibold">{lessonDetails.name}</h3>
-    <p className="text-sm text-gray-500">Total Lessons Created: {lessons?.length}</p>
-      </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {similarByCategory.map(lesson => (
+                    <div
+                      key={lesson._id}
+                      className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 border border-base-300 hover:-translate-y-1"
+                    >
+                      <div className="card-body">
+                        <h3 className="card-title line-clamp-2 text-lg">
+                          {lesson.title}
+                        </h3>
 
-      <Link to={`/profilePage/${lessonDetails.mongoUserId}`}>
-        <button className="btn btn-outline btn-sm">View all lessons</button>
-      </Link>
-    </div>
-        <div>
-{similarByCategory.length > 0 && (
-  <div className="mt-10">
-    <h2 className="text-xl font-bold mb-4">Similar Lessons</h2>
+                        <div className="flex gap-2 my-2">
+                          <span className="badge badge-outline badge-sm">{lesson.category}</span>
+                          <span className="badge badge-outline badge-sm">{lesson.tone}</span>
+                        </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {similarByCategory.map(lesson => (
-        <div
-          key={lesson._id}
-          className="border rounded-lg p-4 shadow hover:shadow-lg transition"
-        >
+                        <div className="card-actions justify-end mt-4">
+                          <Link
+                            to={`/lessonsDetails/${lesson._id}`}
+                            className="btn btn-primary btn-sm w-full"
+                          >
+                            View Lesson
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          <h3 className="font-semibold mt-3 line-clamp-2">
-            {lesson.title}
-          </h3>
+            {/* Recommended Lessons */}
+            {similarByTone.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
+                  Recommended For You
+                </h2>
 
-          <p className="text-sm text-gray-500 mt-1">
-            {lesson.category} · {lesson.tone}
-          </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {similarByTone.map(lesson => (
+                    <div
+                      key={lesson._id}
+                      className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 border border-base-300 hover:-translate-y-1"
+                    >
+                      <div className="card-body">
+                        <h3 className="card-title line-clamp-2 text-lg">
+                          {lesson.title}
+                        </h3>
 
-          <Link
-            to={`/lessonsDetails/${lesson._id}`}
-            className="btn btn-sm btn-outline mt-3 w-full"
-          >
-            View Lesson
-          </Link>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+                        <div className="flex gap-2 my-2">
+                          <span className="badge badge-outline badge-sm">{lesson.category}</span>
+                          <span className="badge badge-outline badge-sm">{lesson.tone}</span>
+                        </div>
 
-{similarByTone.length > 0 && (
-  <div className="mt-10">
-    <h2 className="text-xl font-bold mb-4">Recommended For You</h2>
+                        <div className="card-actions justify-end mt-4">
+                          <Link
+                            to={`/lessonsDetails/${lesson._id}`}
+                            className="btn btn-secondary btn-sm w-full"
+                          >
+                            View Lesson
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {similarByTone.map(lesson => (
-        <div
-          key={lesson._id}
-          className="border rounded-lg p-4 shadow hover:shadow-lg transition"
-        >
+            {/* Comments Section */}
+            <div className="bg-base-100 rounded-2xl p-6 shadow-lg border border-base-300">
+              <Comment />
+            </div>
 
-          <h3 className="font-semibold mt-3 line-clamp-2">
-            {lesson.title}
-          </h3>
-
-          <p className="text-sm text-gray-500 mt-1">
-            {lesson.category} · {lesson.tone}
-          </p>
-
-          <Link
-            to={`/lessonsDetails/${lesson._id}`}
-            className="btn btn-sm btn-outline mt-3 w-full"
-          >
-            View Lesson
-          </Link>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-
-    </div>
-    <div>
-      <Comment></Comment>
-   
-    </div>
-    <ToastContainer></ToastContainer>
+            <ToastContainer />
         </div>
     );
 };
