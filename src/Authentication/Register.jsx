@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { FaEye, FaEyeSlash, FaRegUserCircle } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaRegUserCircle, FaEnvelope, FaLock, FaImage, FaUserPlus } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../Hooks/useAuth";
 import axios from "axios";
@@ -27,7 +27,6 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors },
   } = useForm()
 
@@ -47,7 +46,6 @@ const Register = () => {
         .then((imgRes) => {
           const photoURL = imgRes.data.data.url;
           
-          //update user profi;e
           const userProfile = {
             displayName: data.name,
             photoURL: photoURL,
@@ -74,90 +72,167 @@ const Register = () => {
 
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      
-  <div className="hero-content w-full md:w-[500px] flex-col lg:flex-row-reverse">
-    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-      <div className="p-5">
-        <h2 className="text-center text-5xl font-bold mb-5">Join us today!</h2>
-        <p className=' text-center'>Sing up now to become a member.</p>
+    <div className="min-h-screen bg-gradient-to-br from-primary via-secondary to-primary flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-white opacity-5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white opacity-3 rounded-full blur-3xl"></div>
       </div>
-      <div className="card-body">
-        <form onSubmit={handleSubmit(handleRegister)}>
-          
-          <fieldset className="fieldset">
-            {/* name */}
-          <label className="label">Name</label>
-          <input
-          {...register('name', {required: true})} 
-          type="text" 
-          className="input" 
-          placeholder="Your name" />
-          {
-            errors.name?.type === 'required' && <span className="text-red-500">Name field is required</span>
-          }
 
-          {/* photo */}
-          <label className="label">Photo</label>
-          <input
-          {...register('photo', {required: true})}  
-          type="file" 
-          className="file-input" />
-          {
-            errors.photo?.type === 'required' && <span className="text-red-500">Photo field is required</span>
-          }
-
-          {/* email */}
-          <label className="label">Email</label>
-          <input 
-          {...register('email', {required: true})} 
-          type="email" 
-          className="input" 
-          placeholder="Email" />
-          {
-            errors.email?.type === 'required' && <span className="text-red-500">Email field is required</span>
-          }
-
-          {/* password */}
-          <label className="label">Password</label>
-          <div className='flex items-center'>
-            <input 
-            {...register('password', {required: true, minLength: 6 ,  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/})} 
-            type={showPass ? "text" : "password"} 
-            name='password' 
-            className="input" 
-            placeholder="Password" />
-          <div onClick={handleShowPassword} className="btn btn-xs absolute  right-12 ">{showPass ?  <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}</div>
+      <div className="w-full max-w-md relative z-10">
+        {/* Logo/Icon Section */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-2xl shadow-2xl mb-4">
+            <FaUserPlus className="text-4xl text-primary" />
           </div>
-          {
-            errors.password?.type === 'required' && <span className="text-red-500">Password field is required</span>
-          }
-          {
-            errors.password?.type === 'minLength' && <span className="text-red-500">Password must be at least 6 characters</span>
-          }
-          {
-            errors.password?.type === 'pattern' && <span className="text-red-500">Password must contain one uppercase letter, one special character, at least 8 characters.</span>
-          }
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Join Us Today!</h1>
+          <p className="text-white text-opacity-90 text-lg">Sign up now to become a member</p>
+        </div>
 
-          <div><a className="link link-hover">Forgot password?</a></div>
-          <button className="btn bg-gradient-to-r py-3 rounded-lg font-semibold hover:opacity-90 transition from-primary to-secondary text-white mt-4">Sign Up</button>
-        </fieldset>
-        <p className="text-center text-sm mt-4">
-           <span> Already a member? <Link
-           state={location.pathname}
-           to='/login' className="text-purple-600 font-medium hover:underline">Login Here</Link></span>
-         </p>
-        </form>
-        
+        {/* Main Card */}
+        <div className="bg-base-100 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
+          <div className="p-8">
+            <div>
+              
+              <fieldset className="space-y-5">
+                {/* Name Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-base-content mb-2 flex items-center gap-2">
+                    <FaRegUserCircle className="text-primary" />
+                    Name
+                  </label>
+                  <input
+                    {...register('name', {required: true})} 
+                    type="text" 
+                    className="input input-bordered w-full bg-base-200 focus:bg-base-100 transition-colors duration-200" 
+                    placeholder="Enter your full name" />
+                  {errors.name?.type === 'required' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Name is required
+                    </p>
+                  )}
+                </div>
 
-        <p className="text-center my-3 text-gray-500 text-sm">Or With</p>
+                {/* Photo Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-base-content mb-2 flex items-center gap-2">
+                    <FaImage className="text-primary" />
+                    Profile Photo
+                  </label>
+                  <input
+                    {...register('photo', {required: true})}  
+                    type="file" 
+                    className="file-input file-input-bordered w-full bg-base-200 focus:bg-base-100" />
+                  {errors.photo?.type === 'required' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Photo is required
+                    </p>
+                  )}
+                </div>
 
-            {/* google */}
-        <SocialPage></SocialPage>
+                {/* Email Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-base-content mb-2 flex items-center gap-2">
+                    <FaEnvelope className="text-primary" />
+                    Email Address
+                  </label>
+                  <input 
+                    {...register('email', {required: true})} 
+                    type="email" 
+                    className="input input-bordered w-full bg-base-200 focus:bg-base-100 transition-colors duration-200" 
+                    placeholder="your.email@example.com" />
+                  {errors.email?.type === 'required' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Email is required
+                    </p>
+                  )}
+                </div>
+
+                {/* Password Field */}
+                <div>
+                  <label className="block text-sm font-semibold text-base-content mb-2 flex items-center gap-2">
+                    <FaLock className="text-primary" />
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input 
+                      {...register('password', {
+                        required: true, 
+                        minLength: 6,  
+                        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+                      })} 
+                      type={showPass ? "text" : "password"} 
+                      name="password" 
+                      className="input input-bordered w-full bg-base-200 focus:bg-base-100 transition-colors duration-200 pr-12" 
+                      placeholder="Create a strong password" />
+                    <button 
+                      type="button"
+                      onClick={handleShowPassword} 
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 btn btn-ghost btn-sm btn-circle hover:bg-base-300">
+                      {showPass ? <FaEyeSlash className="text-lg" /> : <FaEye className="text-lg" />}
+                    </button>
+                  </div>
+                  {errors.password?.type === 'required' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Password is required
+                    </p>
+                  )}
+                  {errors.password?.type === 'minLength' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Password must be at least 6 characters
+                    </p>
+                  )}
+                  {errors.password?.type === 'pattern' && (
+                    <p className="text-error text-sm mt-1 flex items-center gap-1">
+                      <span>⚠</span> Must contain uppercase, lowercase, number & special character
+                    </p>
+                  )}
+                </div>
+
+                {/* Forgot Password */}
+                <div className="text-right">
+                  <a className="link link-hover text-sm text-primary font-medium">Forgot password?</a>
+                </div>
+
+                {/* Submit Button */}
+                <button 
+                  type="button"
+                  onClick={handleSubmit(handleRegister)}
+                  className="btn w-full bg-gradient-to-r from-primary to-secondary text-white border-none text-lg font-semibold py-3 h-auto hover:scale-[1.02] hover:shadow-xl transition-all duration-200">
+                  <FaUserPlus className="text-xl" />
+                  Create Account
+                </button>
+              </fieldset>
+
+              {/* Login Link */}
+              <div className="text-center mt-6">
+                <p className="text-base-content text-opacity-70">
+                  Already a member?{' '}
+                  <Link
+                    state={location.pathname}
+                    to="/login" 
+                    className="text-primary font-semibold hover:underline transition-all">
+                    Login Here
+                  </Link>
+                </p>
+              </div>
+
+              {/* Divider */}
+              <div className="divider text-base-content text-opacity-50 text-sm my-6">Or continue with</div>
+
+              {/* Social Login */}
+              <SocialPage />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Text */}
+        <p className="text-center text-white text-opacity-70 text-sm mt-6">
+          By signing up, you agree to our Terms of Service and Privacy Policy
+        </p>
       </div>
     </div>
-  </div>
-</div>
   );
 };
 
