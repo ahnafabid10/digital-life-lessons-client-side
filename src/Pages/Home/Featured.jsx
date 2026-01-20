@@ -4,9 +4,47 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 import { FaBookmark, FaArrowRight, FaStar } from 'react-icons/fa';
 
+// Skeleton Loader Component
+const FeaturedSkeleton = ({ index }) => {
+    return (
+        <div 
+            className="group relative bg-base-100 rounded-2xl shadow-lg dark:shadow-primary/10 overflow-hidden border border-primary/10 dark:border-primary/20"
+            style={{
+                animation: `fadeInUp 0.6s ease-out ${index * 0.08}s both`
+            }}
+        >
+            {/* Featured badge skeleton */}
+            <div className="absolute top-4 right-4 z-10">
+                <div className="w-20 h-6 bg-base-300 dark:bg-base-content/10 rounded-full animate-pulse"></div>
+            </div>
+
+            <div className="p-6 relative z-10 flex flex-col h-full min-h-[280px]">
+                {/* Title skeleton */}
+                <div className="mb-3 pr-20">
+                    <div className="h-5 bg-base-300 dark:bg-base-content/10 rounded-full w-full mb-2 animate-pulse"></div>
+                    <div className="h-5 bg-base-300 dark:bg-base-content/10 rounded-full w-3/4 animate-pulse"></div>
+                </div>
+
+                {/* Description skeleton */}
+                <div className="mb-5 flex-grow">
+                    <div className="h-4 bg-base-300 dark:bg-base-content/10 rounded-full w-full mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-base-300 dark:bg-base-content/10 rounded-full w-full mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-base-300 dark:bg-base-content/10 rounded-full w-2/3 animate-pulse"></div>
+                </div>
+
+                {/* Footer skeleton */}
+                <div className="flex flex-col gap-3 pt-4 border-t border-primary/10 dark:border-primary/20 mt-auto">
+                    <div className="h-6 bg-base-300 dark:bg-base-content/10 rounded-full w-24 animate-pulse"></div>
+                    <div className="h-8 bg-base-300 dark:bg-base-content/10 rounded-full w-full animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Featured = () => {
     const axiosSecure = useAxiosSecure()
-    const {data: featured =[]} = useQuery({
+    const {data: featured =[], isLoading} = useQuery({
         queryKey: ['featured'],
         queryFn: async()=>{
             const res= await axiosSecure.get('/lessons/?status=featured')
@@ -44,57 +82,65 @@ const Featured = () => {
 
                 {/* Cards Grid - 4 columns layout */}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {featured?.map((lesson, index) => (
-                        <div 
-                            key={lesson.id} 
-                            className="group relative bg-base-100 rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20"
-                            style={{
-                                animation: `fadeInUp 0.6s ease-out ${index * 0.08}s both`
-                            }}
-                        >
-                            {/* Gradient overlay on hover */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            {/* Featured badge */}
-                            <div className="absolute top-4 right-4 z-10">
-                                <div className="bg-gradient-to-r from-primary to-secondary text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5">
-                                    <FaStar className="w-3 h-3" />
-                                    Featured
+                    {isLoading ? (
+                        // Skeleton Loading
+                        Array.from({ length: 8 }).map((_, index) => (
+                            <FeaturedSkeleton key={index} index={index} />
+                        ))
+                    ) : (
+                        // Actual Featured Lessons
+                        featured?.map((lesson, index) => (
+                            <div 
+                                key={lesson.id} 
+                                className="group relative bg-base-100 rounded-2xl shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20"
+                                style={{
+                                    animation: `fadeInUp 0.6s ease-out ${index * 0.08}s both`
+                                }}
+                            >
+                                {/* Gradient overlay on hover */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                
+                                {/* Featured badge */}
+                                <div className="absolute top-4 right-4 z-10">
+                                    <div className="bg-gradient-to-r from-primary to-secondary text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1.5">
+                                        <FaStar className="w-3 h-3" />
+                                        Featured
+                                    </div>
                                 </div>
+
+                                <div className="p-6 relative z-10 flex flex-col h-full min-h-[280px]">
+                                    {/* Title */}
+                                    <div className="mb-3 pr-20">
+                                        <h3 className="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
+                                            {lesson.title}
+                                        </h3>
+                                    </div>
+
+                                    {/* Description */}
+                                    <p className="text-sm text-base-content/70 leading-relaxed line-clamp-3 mb-5 flex-grow">
+                                        {lesson.description}
+                                    </p>
+
+                                    {/* Footer */}
+                                    <div className="flex flex-col gap-3 pt-4 border-t border-primary/10 dark:border-primary/20 mt-auto">
+                                        <span className="badge bg-primary/10 dark:bg-primary/20 text-primary border-0 font-semibold px-3 py-2 text-xs w-fit">
+                                            {lesson.category}
+                                        </span>
+                                        
+                                        <Link to={`/lessonsDetails/${lesson._id}`} className="w-full">
+                                            <button className="btn btn-sm w-full bg-gradient-to-r from-primary to-secondary text-white border-0 rounded-full font-semibold hover:scale-105 transition-transform duration-300 shadow-md hover:shadow-lg group/btn">
+                                                Read More
+                                                <FaArrowRight className="w-3.5 h-3.5 ml-1 group-hover/btn:translate-x-1 transition-transform" />
+                                            </button>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                {/* Bottom gradient line */}
+                                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                             </div>
-
-                            <div className="p-6 relative z-10 flex flex-col h-full min-h-[280px]">
-                                {/* Title */}
-                                <div className="mb-3 pr-20">
-                                    <h3 className="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-300 leading-snug line-clamp-2">
-                                        {lesson.title}
-                                    </h3>
-                                </div>
-
-                                {/* Description */}
-                                <p className="text-sm text-base-content/70 leading-relaxed line-clamp-3 mb-5 flex-grow">
-                                    {lesson.description}
-                                </p>
-
-                                {/* Footer */}
-                                <div className="flex flex-col gap-3 pt-4 border-t border-primary/10 dark:border-primary/20 mt-auto">
-                                    <span className="badge bg-primary/10 dark:bg-primary/20 text-primary border-0 font-semibold px-3 py-2 text-xs w-fit">
-                                        {lesson.category}
-                                    </span>
-                                    
-                                    <Link to={`/lessonsDetails/${lesson._id}`} className="w-full">
-                                        <button className="btn btn-sm w-full bg-gradient-to-r from-primary to-secondary text-white border-0 rounded-full font-semibold hover:scale-105 transition-transform duration-300 shadow-md hover:shadow-lg group/btn">
-                                            Read More
-                                            <FaArrowRight className="w-3.5 h-3.5 ml-1 group-hover/btn:translate-x-1 transition-transform" />
-                                        </button>
-                                    </Link>
-                                </div>
-                            </div>
-
-                            {/* Bottom gradient line */}
-                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </section>
 

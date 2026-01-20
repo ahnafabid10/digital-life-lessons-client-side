@@ -4,10 +4,43 @@ import { Link } from 'react-router';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { FaTrophy, FaMedal, FaStar, FaAward } from 'react-icons/fa';
 
+// Skeleton Loader Component
+const ContributorSkeleton = ({ index }) => {
+  return (
+    <div
+      className="block"
+      style={{
+        animation: `fadeInScale 0.6s ease-out ${index * 0.08}s both`
+      }}
+    >
+      <div className="relative bg-base-100 rounded-2xl p-6 shadow-lg dark:shadow-primary/10 overflow-hidden border border-primary/10 dark:border-primary/20">
+        
+        {/* Rank Badge Skeleton */}
+        <div className="absolute top-4 right-4 z-10">
+          <div className="w-10 h-10 rounded-full bg-base-300 dark:bg-base-content/10 animate-pulse"></div>
+        </div>
+
+        {/* Avatar Skeleton */}
+        <div className="mb-5 flex justify-center relative z-10">
+          <div className="w-28 h-28 rounded-full bg-base-300 dark:bg-base-content/10 animate-pulse ring-4 ring-primary/20 dark:ring-primary/30"></div>
+        </div>
+
+        {/* Name Skeleton */}
+        <div className="text-center relative z-10">
+          <div className="h-5 bg-base-300 dark:bg-base-content/10 rounded-full w-3/4 mx-auto mb-2 animate-pulse"></div>
+          
+          {/* Contribution Count Skeleton */}
+          <div className="h-4 bg-base-300 dark:bg-base-content/10 rounded-full w-1/2 mx-auto animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const TopContributors = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: contributors = [] } = useQuery({
+  const { data: contributors = [], isLoading } = useQuery({
     queryKey: ['contributors'],
     queryFn: async () => {
       const res = await axiosSecure.get('/lessons/top-contributors');
@@ -57,67 +90,75 @@ const TopContributors = () => {
 
         {/* Contributors Grid - 4 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {contributors.map((contributor, index) => (
-            <Link
-              key={index}
-              to={`/profile/${contributor?._id || contributor?.userId}`}
-              className="group block"
-              style={{
-                animation: `fadeInScale 0.6s ease-out ${index * 0.08}s both`
-              }}
-            >
-              {/* Card */}
-              <div className="relative bg-base-100 rounded-2xl p-6 shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20 cursor-pointer">
-                
-                {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                {/* Rank Badge */}
-                <div className="absolute top-4 right-4 z-10">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-lg ${getRankBadgeStyle(index)}`}>
-                    {getRankIcon(index)}
-                  </div>
-                </div>
-
-                {/* Avatar */}
-                <div className="mb-5 flex justify-center relative z-10">
-                  <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-primary/20 group-hover:ring-primary/40 dark:ring-primary/30 dark:group-hover:ring-primary/50 transition-all duration-300">
-                    <img
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      src={contributor?.photo}
-                      alt={contributor?.name}
-                    />
-                  </div>
-                </div>
-
-                {/* Name */}
-                <div className="text-center relative z-10">
-                  <h3 className="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-300 mb-2">
-                    {contributor?.name}
-                  </h3>
+          {isLoading ? (
+            // Skeleton Loading
+            Array.from({ length: 8 }).map((_, index) => (
+              <ContributorSkeleton key={index} index={index} />
+            ))
+          ) : (
+            // Actual Contributors
+            contributors.map((contributor, index) => (
+              <Link
+                key={index}
+                to={`/profile/${contributor?._id || contributor?.userId}`}
+                className="group block"
+                style={{
+                  animation: `fadeInScale 0.6s ease-out ${index * 0.08}s both`
+                }}
+              >
+                {/* Card */}
+                <div className="relative bg-base-100 rounded-2xl p-6 shadow-lg hover:shadow-2xl dark:shadow-primary/10 dark:hover:shadow-primary/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden border border-primary/10 dark:border-primary/20 cursor-pointer">
                   
-                  {/* Contribution Count */}
-                  {contributor?.lessonCount && (
-                    <p className="text-sm text-base-content/60 font-medium">
-                      {contributor.lessonCount} {contributor.lessonCount === 1 ? 'Lesson' : 'Lessons'}
+                  {/* Gradient overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 dark:from-primary/10 dark:to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  {/* Rank Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-lg ${getRankBadgeStyle(index)}`}>
+                      {getRankIcon(index)}
+                    </div>
+                  </div>
+
+                  {/* Avatar */}
+                  <div className="mb-5 flex justify-center relative z-10">
+                    <div className="w-28 h-28 rounded-full overflow-hidden ring-4 ring-primary/20 group-hover:ring-primary/40 dark:ring-primary/30 dark:group-hover:ring-primary/50 transition-all duration-300">
+                      <img
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        src={contributor?.photo}
+                        alt={contributor?.name}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Name */}
+                  <div className="text-center relative z-10">
+                    <h3 className="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-300 mb-2">
+                      {contributor?.name}
+                    </h3>
+                    
+                    {/* Contribution Count */}
+                    {contributor?.lessonCount && (
+                      <p className="text-sm text-base-content/60 font-medium">
+                        {contributor.lessonCount} {contributor.lessonCount === 1 ? 'Lesson' : 'Lessons'}
+                      </p>
+                    )}
+
+                    {/* View Profile Hint */}
+                    <p className="text-xs text-primary/70 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      Click to view profile
                     </p>
-                  )}
+                  </div>
 
-                  {/* View Profile Hint */}
-                  <p className="text-xs text-primary/70 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Click to view profile
-                  </p>
+                  {/* Bottom gradient line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                 </div>
-
-                {/* Bottom gradient line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          )}
         </div>
 
         {/* Empty State */}
-        {contributors.length === 0 && (
+        {!isLoading && contributors.length === 0 && (
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <FaTrophy className="w-12 h-12 text-primary" />
